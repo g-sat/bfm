@@ -27,8 +27,8 @@ export function Navbar() {
           <Image
             src="/nav_bmf.svg"
             alt="Bolt Frame Media Logo"
-            width={150}
-            height={150}
+            width={200}
+            height={200}
             className="hover:brightness-75 transition-all duration-200"
             priority
           />

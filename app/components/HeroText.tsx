@@ -1,4 +1,3 @@
-// components/HeroText.tsx (updated for professional, striking animation)
 "use client";
 
 import { useEffect, useRef } from 'react';
@@ -22,40 +21,43 @@ export function HeroText() {
 
       const chars = element.querySelectorAll('span');
 
-      // GSAP animation timeline
+      // GSAP animation timeline for professional, cinematic entrance
       const tl = gsap.timeline();
 
-      // Professional entrance animation: subtle scale, no random rotation, smooth fade-in
       tl.fromTo(
         chars,
         {
           opacity: 0,
-          scale: 0.8,
-          y: 50,
+          scale: 0.9,
+          y: 20, // Subtle upward motion
         },
         {
           opacity: 1,
           scale: 1,
           y: 0,
-          duration: 1.2,
-          stagger: 0.03,
+          duration: 1.5,
+          stagger: 0.04,
           ease: 'power3.out',
         }
       );
 
-      // Add a subtle, static glow (non-pulsating) for cinematic effect
-      tl.to(chars, {
-        textShadow: '0 0 8px rgba(255, 50, 50, 0.6), 0 0 16px rgba(255, 50, 50, 0.4)',
-        duration: 0.8,
-        ease: 'power2.inOut',
-      }, '-=0.8'); // Apply static glow overlapping with entrance
+      // Add subtle, static red glow for cinematic effect
+      tl.to(
+        chars,
+        {
+          textShadow: '0 0 6px rgba(255, 50, 50, 0.5), 0 0 12px rgba(255, 50, 50, 0.3)',
+          duration: 1,
+          ease: 'power2.inOut',
+        },
+        '-=1.2' // Overlap with entrance for smooth integration
+      );
     }
   }, []);
 
   return (
     <h1
       ref={textRef}
-      className={`${bebas.className} text-[10rem] md:text-[12rem] font-bold text-white drop-shadow-2xl select-none pointer-events-none`}
+      className={`${bebas.className} text-5xl sm:text-6xl md:text-8xl lg:text-[8rem] text-[10vw] max-text-[10rem] font-bold text-white drop-shadow-2xl select-none pointer-events-none pl-4 sm:pl-8 md:pl-12 hero-text-responsive`}
     >
       Bolt Frame Media
     </h1>

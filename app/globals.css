@@ -31,3 +31,13 @@ body {
     top: 0.8vw;
     left: 1.5vw;
 }
+
+@media (max-width: 400px) {
+    .hero-text-responsive {
+        font-size: 8vw !important;
+        /* Smaller font for very small screens */
+        max-font-size: 2.5rem !important;
+        padding-left: 1rem !important;
+        /* Tighter padding */
+    }
+}
