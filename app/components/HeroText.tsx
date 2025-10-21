@@ -14,8 +14,8 @@ export function HeroText() {
       const element = textRef.current;
       
       // Manually split into two lines
-      const line1 = 'Bolt Frame';
-      const line2 = 'Media';
+      const line1 = 'BOLD FRAME';
+      const line2 = 'MEDIA';
       
       // Create character spans for each line
       const createSpans = (text: string) => {
@@ -56,9 +56,9 @@ export function HeroText() {
       tl.to(
         chars,
         {
-          textShadow: '0 0 6px rgba(255, 50, 50, 0.5), 0 0 12px rgba(255, 50, 50, 1)',
-          duration: 1,
-          ease: 'power2.inOut',
+          // textShadow: '0 0 6px rgba(255, 50, 50, 0.5), 0 0 12px rgba(255, 50, 50, 1)',
+          // duration: 1,
+          // ease: 'power2.inOut',
         },
         '-=1.2'
       );
@@ -68,9 +68,9 @@ export function HeroText() {
   return (
     <h1
       ref={textRef}
-      className={`${montserrat.className} text-5xl sm:text-6xl md:text-8xl lg:text-[9rem] text-[10vw] max-text-[10rem] font-bold text-white drop-shadow-2xl select-none pointer-events-none pl-4 sm:pl-8 md:pl-12 hero-text-responsive leading-tight`}
+      className={`${montserrat.className} text-5xl sm:text-6xl md:text-8xl lg:text-[7rem] text-[10vw] max-text-[10rem] font-bold text-white drop-shadow-2xl select-none pointer-events-none pl-4 sm:pl-8 md:pl-12 hero-text-responsive leading-tight`}
     >
-      Bolt Frame Media
+      Bold Frame Media
     </h1>
   );
 }
