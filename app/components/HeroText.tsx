@@ -66,11 +66,14 @@ export function HeroText() {
   }, []);
 
   return (
-    <h1
-      ref={textRef}
-      className={`${montserrat.className} text-5xl sm:text-6xl md:text-8xl lg:text-[7rem] text-[10vw] max-text-[10rem] font-bold text-white drop-shadow-2xl select-none pointer-events-none pl-4 sm:pl-8 md:pl-12 hero-text-responsive leading-tight`}
-    >
-      Bold Frame Media
-    </h1>
+    <main>
+      <h1
+        ref={textRef}
+        className={`${montserrat.className} text-5xl sm:text-6xl md:text-8xl lg:text-[7rem] text-[10vw] max-text-[10rem] font-bold text-white drop-shadow-2xl select-none pointer-events-none pl-4 sm:pl-8 md:pl-12 hero-text-responsive leading-tight`}
+      >
+        Bold Frame Media
+      </h1>
+    </main>
+    
   );
 }

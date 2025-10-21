@@ -58,7 +58,7 @@ export function Hero3D() {
     // no ref needed since listening globally
     <div className="h-screen w-full pointer-events-auto bg-transparent">
       <Canvas
-        camera={{ position: [0, 0, 6], fov: 45 }}
+        camera={{ position: [2, 0, 6], fov: 45 }}
         className="h-full w-full pointer-events-none"
         gl={{ alpha: true }}
         style={{ background: "transparent" }}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 1000">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 130.951px;
+        letter-spacing: -.056em;
+      }
+
+      .cls-1, .cls-2 {
+        font-family: ProximaNova-Black, 'Proxima Nova';
+        font-weight: 800;
+      }
+
+      .cls-2 {
+        font-size: 52.764px;
+        letter-spacing: -.047em;
+      }
+    </style>
+  </defs>
+  <text class="cls-1" transform="translate(211.15 532.015) scale(.941 1)"><tspan x="0" y="0">BOLD FRAME</tspan></text>
+  <text class="cls-2" transform="translate(797.688 581.514) scale(.941 1)"><tspan x="0" y="0">Media.</tspan></text>
+  <image width="2006" height="2303" transform="translate(58.9 443.221) scale(.06)" xlink:href="../PNG Logos/BFM_Icon_Red.png"/>
+</svg>

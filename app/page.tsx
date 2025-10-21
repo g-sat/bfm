@@ -7,6 +7,7 @@ import LaserFlow from "@/components/LaserFlow";
 export default function Home() {
   return (
     <main className="relative min-h-screen">
+      {/* Next.js AUTOMATICALLY shows app/loading.tsx */}
       <Navbar/>
       
       {/* Full-width Section - HERO + FRAMES */}
@@ -21,9 +22,9 @@ export default function Home() {
         <div className="absolute inset-0 z-20 pointer-events-none">
           <LaserFlow 
             color="#FF4444"
-            fogIntensity={0.2}
+            fogIntensity={0.5}
             wispIntensity={2}
-            flowSpeed={0.4}
+            flowSpeed={0.5}
           />
         </div>
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 889.004 209.16">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: ProximaNova-Black, 'Proxima Nova';
+        font-size: 130.951px;
+        font-weight: 800;
+        letter-spacing: -.056em;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <text class="cls-1" transform="translate(154.417 136.579) scale(.941 1)"><tspan x="0" y="0">BOLD FRAME</tspan></text>
+    <image width="2807" height="4682" transform="scale(.045)" xlink:href="../PNG Logos/BFM_Icon_Black.png"/>
+  </g>
+</svg>

@@ -21,14 +21,14 @@ export function Navbar() {
         isScrolled ? 'bg-black/90' : 'bg-transparent'
       }`}
     >
-      <div className="container mx-auto px-8 py-4 flex justify-between items-center">
+      <div className="container mx-auto px-8 py-8 flex justify-between items-center">
         {/* SVG Logo */}
         <a href="#" className="flex items-center">
           <Image
             src="/nav_bmf.svg"
             alt="Bolt Frame Media Logo"
-            width={200}
-            height={200}
+            width={150}
+            height={150}
             className="hover:brightness-75 transition-all duration-200"
             priority
           />
@@ -38,7 +38,7 @@ export function Navbar() {
             <li key={item}>
               <a
                 href={`#${item.toLowerCase()}`}
-                className="text-white hover:text-red-500 transition-colors duration-200 text-lg"
+                className="text-white hover:text-red-500 transition-colors duration-200 text-sm"
               >
                 {item}
               </a>
