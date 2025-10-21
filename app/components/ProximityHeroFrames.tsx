@@ -173,9 +173,9 @@ export const ProximityHeroFrames: React.FC<ProximityHeroFramesProps> = ({
                     />
                   </div>
 
-                  <h3 className={`absolute bottom-4 text-sm font-bold text-center transition-all duration-300 ${isActive ? 'text-white/40' : 'opacity-0'}`}>
+                  {/* <h3 className={`absolute bottom-4 text-sm font-bold text-center transition-all duration-300 ${isActive ? 'text-white/40' : 'opacity-0'}`}>
                     {frame.title}
-                  </h3>
+                  </h3> */}
                 </div>
               </div>
 
