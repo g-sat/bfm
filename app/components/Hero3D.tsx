@@ -65,7 +65,7 @@ export function Hero3D() {
       >
         <ambientLight intensity={0.6} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
-        <group ref={modelRef} position={[0, -0.5, 0]} scale={1}>
+        <group ref={modelRef} position={[0, 0, 0]} scale={1}>
           <Model />
         </group>
       </Canvas>
