@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from 'react';
-import { Bebas_Neue } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
 import gsap from 'gsap';
 
-const bebas = Bebas_Neue({ subsets: ['latin'], weight: '400' });
+const montserrat = Montserrat({ subsets: ['latin'], weight: '800' });
 
 export function HeroText() {
   const textRef = useRef<HTMLHeadingElement>(null);
@@ -12,13 +12,24 @@ export function HeroText() {
   useEffect(() => {
     if (textRef.current) {
       const element = textRef.current;
-      // Split text into individual spans for each character
-      let newText = '';
-      element.innerText.split('').forEach((char) => {
-        newText += `<span class="inline-block">${char === ' ' ? '&nbsp;' : char}</span>`;
-      });
-      element.innerHTML = newText;
+      
+      // Manually split into two lines
+      const line1 = 'Bolt Frame';
+      const line2 = 'Media';
+      
+      // Create character spans for each line
+      const createSpans = (text: string) => {
+        return text.split('').map(char => 
+          char === ' ' 
+            ? '<span class="inline-block">&nbsp;</span>'
+            : `<span class="inline-block">${char}</span>`
+        ).join('');
+      };
+      
+      // Set HTML: line1 + <br> + line2
+      element.innerHTML = `${createSpans(line1)}<br />${createSpans(line2)}`;
 
+      // Get all character spans
       const chars = element.querySelectorAll('span');
 
       // GSAP animation timeline for professional, cinematic entrance
@@ -29,7 +40,7 @@ export function HeroText() {
         {
           opacity: 0,
           scale: 0.9,
-          y: 20, // Subtle upward motion
+          y: 20,
         },
         {
           opacity: 1,
@@ -45,11 +56,11 @@ export function HeroText() {
       tl.to(
         chars,
         {
-          textShadow: '0 0 6px rgba(255, 50, 50, 0.5), 0 0 12px rgba(255, 50, 50, 0.3)',
+          textShadow: '0 0 6px rgba(255, 50, 50, 0.5), 0 0 12px rgba(255, 50, 50, 1)',
           duration: 1,
           ease: 'power2.inOut',
         },
-        '-=1.2' // Overlap with entrance for smooth integration
+        '-=1.2'
       );
     }
   }, []);
@@ -57,7 +68,7 @@ export function HeroText() {
   return (
     <h1
       ref={textRef}
-      className={`${bebas.className} text-5xl sm:text-6xl md:text-8xl lg:text-[8rem] text-[10vw] max-text-[10rem] font-bold text-white drop-shadow-2xl select-none pointer-events-none pl-4 sm:pl-8 md:pl-12 hero-text-responsive`}
+      className={`${montserrat.className} text-5xl sm:text-6xl md:text-8xl lg:text-[9rem] text-[10vw] max-text-[10rem] font-bold text-white drop-shadow-2xl select-none pointer-events-none pl-4 sm:pl-8 md:pl-12 hero-text-responsive leading-tight`}
     >
       Bolt Frame Media
     </h1>
