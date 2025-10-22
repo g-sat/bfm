@@ -43,7 +43,7 @@ export default function LoadingPage() {
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black"
     >
       {/* Fullscreen Purple Laser */}
-      <div className="absolute inset-0">
+      {/* <div className="absolute inset-0">
         <LaserFlow 
           color="#6846b3"
           fogIntensity={0.3}
@@ -52,12 +52,12 @@ export default function LoadingPage() {
           verticalSizing={3}
           horizontalSizing={1.5}
         />
-      </div>
+      </div> */}
 
       {/* PERFECT CIRCULAR "BOLD FRAME MEDIA" */}
       <CircularText
-        text="BOLD*FRAME*MEDIA"
-        spinDuration={12}
+        text="BOLD*FRAME*MEDIA*"
+        spinDuration={5}
         size={280}
         className="text-[#6846b3]"
       />
