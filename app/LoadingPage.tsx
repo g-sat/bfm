@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 //import { Montserrat } from 'next/font/google';
 import gsap from 'gsap';
-import LaserFlow from '../components/Hero/LaserFlow';
+//import LaserFlow from '../components/Hero/LaserFlow';
 import CircularText from '../components/Overalls/CircularText';
 
 //const montserrat = Montserrat({ subsets: ['latin'], weight: '800' });

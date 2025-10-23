@@ -2,7 +2,7 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { Model } from "../Model";
+import { Model } from "./Model";
 import { useRef, useEffect } from "react";
 import { Group } from "three";
 import { MathUtils } from "three";
