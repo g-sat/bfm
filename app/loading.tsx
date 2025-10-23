@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import LaserFlow from '@/components/LaserFlow';
-import CircularText from './components/CircularText';
+import LaserFlow from '@/components/Hero/LaserFlow';
+import CircularText from '../components/Overalls/CircularText';
 
 export default function Loading() {
   const containerRef = useRef<HTMLDivElement>(null);

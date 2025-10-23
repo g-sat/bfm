@@ -1,8 +1,8 @@
-import { ProximityHeroFrames } from "./components/ProximityHeroFrames";
-import { Hero3D } from "./components/Hero3D";
-import { HeroText } from "./components/HeroText";
-import { Navbar } from "./components/Navbar";
-import LaserFlow from "@/components/LaserFlow";
+import { ProximityHeroFrames } from "../components/Hero/ProximityHeroFrames";
+import { Hero3D } from "../components/Hero/Hero3D";
+import { HeroText } from "../components/Hero/HeroText";
+import { Navbar } from "../components/Overalls/Navbar";
+import LaserFlow from "@/components/Hero/LaserFlow";
 
 export default function Home() {
   return (
