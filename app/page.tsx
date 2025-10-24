@@ -4,13 +4,14 @@ import { HeroText } from "../components/Hero/HeroText";
 import { Navbar } from "../components/Overalls/Navbar";
 import LaserFlow from "@/components/Hero/LaserFlow";
 import BentoGrid from "@/components/About/MagicBento";
+import AudioPlayer from "@/components/Overalls/Audio";
 
 export default function Home() {
   return (
     <main className="relative min-h-screen">
       {/* Next.js AUTOMATICALLY shows app/loading.tsx */}
       <Navbar/>
-      
+      <AudioPlayer />
       {/* Full-width Section - HERO + FRAMES */}
       <div className="relative w-full h-screen">
         
