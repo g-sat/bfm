@@ -21,7 +21,7 @@ export function Navbar() {
         isScrolled ? 'bg-black/90' : 'bg-transparent'
       }`}
     >
-      <div className="container mx-auto px-8 py-8 flex justify-between items-center">
+      <div className="container mx-auto px-8 py-4 flex justify-between items-center">
         {/* SVG Logo */}
         <a href="#" className="flex items-center">
           <Image

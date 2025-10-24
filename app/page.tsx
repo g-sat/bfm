@@ -3,6 +3,7 @@ import { Hero3D } from "../components/Hero/Hero3D";
 import { HeroText } from "../components/Hero/HeroText";
 import { Navbar } from "../components/Overalls/Navbar";
 import LaserFlow from "@/components/Hero/LaserFlow";
+import BentoGrid from "@/components/About/MagicBento";
 
 export default function Home() {
   return (
@@ -37,6 +38,9 @@ export default function Home() {
         <div className="absolute inset-0 flex items-center justify-start pl-16 z-25 pointer-events-none">
           <HeroText />
         </div>
+      </div>
+      <div className="relative w-full h-full">
+        <BentoGrid />
       </div>
     </main>
   );

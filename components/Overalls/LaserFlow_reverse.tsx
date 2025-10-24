@@ -24,6 +24,7 @@ type Props = {
   falloffStart?: number;
   fogFallSpeed?: number;
   color?: string;
+  direction?: 'down' | 'up';
 };
 
 // ✅ VERTEX SHADER
@@ -65,6 +66,7 @@ uniform float uFalloffStart;
 uniform float uFogFallSpeed;
 uniform vec3 uColor;
 uniform float uFade;
+uniform float uDirection;
 
 // Constants
 #define PI 3.14159265359
@@ -236,6 +238,7 @@ float vWisps(vec2 uv, float topF) {
     
     float span = smoothstep(-3.0, 0.0, y) * (1.0 - smoothstep(R_V - 6.0, R_V, y));
     return uWIntensity * sum * topF * bGain * span;
+    
 }
 
 // Main image function
@@ -267,7 +270,7 @@ void mainImage(out vec4 fc, in vec2 frag) {
     }
     
     // Vertical beam
-    float yPix = uvc.y;
+    float yPix = uvc.y * uDirection;
     float cy = clamp(-yPix / (R_V * uVLenFactor), -1.0, 1.0);
     float tV = clamp(TWO_PI - acos(cy), tauMin, tauMax);
     for(int k = -TAP_RADIUS; k <= TAP_RADIUS; k++) {
@@ -384,6 +387,7 @@ type Uniforms = {
   uFalloffStart: NumberUniform;
   uFogFallSpeed: NumberUniform;
   uFade: NumberUniform;
+  uDirection: NumberUniform;
   
   // Vectors (.set() method)
   iResolution: Vector3Uniform;
@@ -411,7 +415,8 @@ export const LaserFlow: React.FC<Props> = ({
   decay = 1.1,
   falloffStart = 1.2,
   fogFallSpeed = 0.6,
-  color = '#833cc2'
+  color = '#833cc2',
+  direction = 'down',
 }) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -517,7 +522,8 @@ export const LaserFlow: React.FC<Props> = ({
         uFalloffStart: { value: falloffStart },
         uFogFallSpeed: { value: fogFallSpeed },
         uColor: { value: new THREE.Vector3(1, 1, 1) },
-        uFade: { value: hasFadedRef.current ? 1 : 0 }
+        uFade: { value: hasFadedRef.current ? 1 : 0 },
+        uDirection: { value: direction === 'up' ? 1.0 : -1.0 },
       };
       uniformsRef.current = uniforms;
 
@@ -719,6 +725,7 @@ export const LaserFlow: React.FC<Props> = ({
     uniforms.uDecay.value = decay;
     uniforms.uFalloffStart.value = falloffStart;
     uniforms.uFogFallSpeed.value = fogFallSpeed;
+    uniforms.uDirection.value = direction === 'up' ? 1.0 : -1.0;
 
     // Vector: .set() method
     const { r, g, b } = hexToRGB(color || '#FFFFFF');
