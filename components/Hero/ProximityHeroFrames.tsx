@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import Image from "next/image";
 
 interface Frame {
   id: number;
@@ -16,16 +16,27 @@ interface Frame {
 interface ProximityHeroFramesProps {
   proximityRadius?: number;
   className?: string;
+  enableWave?: boolean;
 }
 
 export const ProximityHeroFrames: React.FC<ProximityHeroFramesProps> = ({
   proximityRadius = 100,
   className,
+  enableWave = true,
 }) => {
-  const [activeFrames, setActiveFrames] = useState<Map<number, { x: number; y: number }>>(new Map());
+  const [activeFrames, setActiveFrames] = useState<
+    Map<number, { x: number; y: number; source: "mouse" | "wave" }>
+  >(new Map());
+
   const containerRef = useRef<HTMLDivElement>(null);
   const frameRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const timeoutRefs = useRef<Map<number, NodeJS.Timeout>>(new Map());
+  const neighborsRef = useRef<Map<number, number[]>>(new Map());
+  const lastBatchRef = useRef<number[]>([]);
+
+  // wave refs
+  const waveTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const wavePausedRef = useRef<boolean>(false);
 
   const frames: Frame[] = [
     { id: 0, gridColumn: 'span 2', gridRow: 'span 2', delay: 0, imagePath: '/assets/frames/AE 01.png', color: 'from-white to-white/80', title: 'Innovation' },
@@ -66,8 +77,29 @@ export const ProximityHeroFrames: React.FC<ProximityHeroFramesProps> = ({
     { id: 35, gridColumn: 'span 1', gridRow: 'span 1', delay: 0.1, imagePath: '/assets/frames/PR 12.png', color: 'from-white to-white/80', title: 'Screenplay' },
   ];
 
+  // Compute neighbors based on approximate grid positions
   useEffect(() => {
-    // Copy timeoutRefs.current to a local variable
+    const getPos = (id: number) => ({
+      x: id % 8,
+      y: Math.floor(id / 8),
+    });
+
+    for (let i = 0; i < frames.length; i++) {
+      neighborsRef.current.set(i, []);
+      for (let j = 0; j < frames.length; j++) {
+        if (i === j) continue;
+        const pi = getPos(i);
+        const pj = getPos(j);
+        const dist = Math.abs(pi.x - pj.x) + Math.abs(pi.y - pj.y);
+        if (dist <= 1) {
+          neighborsRef.current.get(i)!.push(j);
+        }
+      }
+    }
+  }, [frames.length]);
+
+  // Mouse proximity logic (unchanged)
+  useEffect(() => {
     const currentTimeouts = timeoutRefs.current;
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -77,7 +109,7 @@ export const ProximityHeroFrames: React.FC<ProximityHeroFramesProps> = ({
       const mouseX = e.clientX - rect.left;
       const mouseY = e.clientY - rect.top;
 
-      const newActiveFrames = new Map<number, { x: number; y: number }>();
+      const newActiveFrames = new Map<number, { x: number; y: number; source: "mouse" | "wave" }>();
 
       frameRefs.current.forEach((frameElement, frameId) => {
         const frameRect = frameElement.getBoundingClientRect();
@@ -96,15 +128,13 @@ export const ProximityHeroFrames: React.FC<ProximityHeroFramesProps> = ({
         if (distance <= proximityRadius) {
           const localX = mouseX - frameLeft;
           const localY = mouseY - frameTop;
-          newActiveFrames.set(frameId, { x: localX, y: localY });
+          newActiveFrames.set(frameId, { x: localX, y: localY, source: "mouse" });
 
-          // Clear existing timeout for this frame
           const existingTimeout = currentTimeouts.get(frameId);
           if (existingTimeout) {
             clearTimeout(existingTimeout);
           }
 
-          // Set new timeout to clear this frame after 3 seconds
           const timeout = setTimeout(() => {
             setActiveFrames((prev) => {
               const updated = new Map(prev);
@@ -126,12 +156,151 @@ export const ProximityHeroFrames: React.FC<ProximityHeroFramesProps> = ({
       container.addEventListener('mousemove', handleMouseMove);
       return () => {
         container.removeEventListener('mousemove', handleMouseMove);
-        // Clear all timeouts using the local variable
         currentTimeouts.forEach((timeout) => clearTimeout(timeout));
         currentTimeouts.clear();
       };
     }
   }, [proximityRadius]);
+
+  // Random clustered wave logic
+  const startWave = useCallback(() => {
+    if (!enableWave) return;
+    if (waveTimerRef.current) clearTimeout(waveTimerRef.current);
+
+    const getPos = (id: number) => ({
+      x: id % 8,
+      y: Math.floor(id / 8),
+    });
+
+    const getMinDist = (id: number, batch: number[]) => {
+      let minD = Infinity;
+      const pi = getPos(id);
+      for (const b of batch) {
+        const pb = getPos(b);
+        const d = Math.abs(pi.x - pb.x) + Math.abs(pi.y - pb.y);
+        minD = Math.min(minD, d);
+      }
+      return minD;
+    };
+
+    const countWaveActive = () => {
+      let count = 0;
+      activeFrames.forEach((data) => {
+        if (data.source === "wave") count++;
+      });
+      return count;
+    };
+
+    const showNext = () => {
+      if (wavePausedRef.current || countWaveActive() > 0) {
+        waveTimerRef.current = setTimeout(showNext, 500); // retry later
+        return;
+      }
+
+      // Find starting id for this batch
+      const candidates: number[] = [];
+      const lastBatch = lastBatchRef.current;
+      for (let i = 0; i < frames.length; i++) {
+        if (activeFrames.has(i)) continue;
+        const dist = lastBatch.length > 0 ? getMinDist(i, lastBatch) : Infinity;
+        if (lastBatch.length === 0 || dist <= 2) {
+          candidates.push(i);
+        }
+      }
+      if (candidates.length === 0) {
+        // Fallback to any inactive
+        for (let i = 0; i < frames.length; i++) {
+          if (!activeFrames.has(i)) candidates.push(i);
+        }
+      }
+
+      if (candidates.length === 0) {
+        waveTimerRef.current = setTimeout(showNext, 1000);
+        return;
+      }
+
+      const startId = candidates[Math.floor(Math.random() * candidates.length)];
+
+      // Build random connected batch (1-3 frames)
+      const batch: number[] = [startId];
+      for (let k = 0; k < 2; k++) { // up to 2 more
+        if (Math.random() < 0.5) break; // random chance to stop early
+
+        const possible = new Set<number>();
+        for (const b of batch) {
+          for (const n of neighborsRef.current.get(b) || []) {
+            if (!batch.includes(n) && !activeFrames.has(n)) {
+              possible.add(n);
+            }
+          }
+        }
+
+        if (possible.size === 0) break;
+
+        const addId = Array.from(possible)[Math.floor(Math.random() * possible.size)];
+        batch.push(addId);
+      }
+
+      // Reveal the batch
+      batch.forEach((frameId) => {
+        const el = frameRefs.current.get(frameId);
+        if (!el) return;
+
+        const rect = el.getBoundingClientRect();
+        const localX = Math.random() * rect.width;
+        const localY = Math.random() * rect.height;
+
+        setActiveFrames((prev) => {
+          const copy = new Map(prev);
+          copy.set(frameId, { x: localX, y: localY, source: "wave" });
+          return copy;
+        });
+
+        const hideTimeout = setTimeout(() => {
+          setActiveFrames((prev) => {
+            const copy = new Map(prev);
+            copy.delete(frameId);
+            return copy;
+          });
+          timeoutRefs.current.delete(frameId);
+        }, 2000);
+
+        timeoutRefs.current.set(frameId, hideTimeout);
+      });
+
+      lastBatchRef.current = batch;
+
+      // Schedule next batch (reduced speed: every ~4 seconds)
+      waveTimerRef.current = setTimeout(showNext, 4000);
+    };
+
+    showNext();
+  }, [enableWave, frames, activeFrames]);
+
+  useEffect(() => {
+    if (enableWave) startWave();
+    return () => {
+      if (waveTimerRef.current) clearTimeout(waveTimerRef.current);
+    };
+  }, [enableWave, startWave]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const onEnter = () => (wavePausedRef.current = true);
+    const onLeave = () => {
+      wavePausedRef.current = false;
+      if (enableWave && !waveTimerRef.current) startWave();
+    };
+
+    container.addEventListener("mouseenter", onEnter);
+    container.addEventListener("mouseleave", onLeave);
+    return () => {
+      container.removeEventListener("mouseenter", onEnter);
+      container.removeEventListener("mouseleave", onLeave);
+    };
+  }, [enableWave, startWave]);
 
   const setFrameRef = (id: number) => (element: HTMLDivElement | null) => {
     if (element) {
@@ -172,10 +341,6 @@ export const ProximityHeroFrames: React.FC<ProximityHeroFramesProps> = ({
                       priority
                     />
                   </div>
-
-                  {/* <h3 className={`absolute bottom-4 text-sm font-bold text-center transition-all duration-300 ${isActive ? 'text-white/40' : 'opacity-0'}`}>
-                    {frame.title}
-                  </h3> */}
                 </div>
               </div>
 

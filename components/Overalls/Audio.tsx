@@ -5,7 +5,7 @@ import { Music, VolumeX, Volume2 } from "lucide-react";
 
 export default function AudioPlayer() {
   const [isMuted, setIsMuted] = useState(false);
-  const [volume, setVolume] = useState(0.35);
+  const [volume, setVolume] = useState(0.05);
   const [previousVolume, setPreviousVolume] = useState(0.35);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showControls, setShowControls] = useState(false); // <-- new

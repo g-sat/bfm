@@ -24,9 +24,9 @@ export default function Home() {
         <div className="absolute inset-0 z-20 pointer-events-none">
           <LaserFlow 
             color="#FF4444"
-            fogIntensity={0.5}
-            wispIntensity={2}
-            flowSpeed={0.5}
+            fogIntensity={0.9}
+            wispIntensity={5}
+            flowSpeed={0.3}
           />
         </div>
 

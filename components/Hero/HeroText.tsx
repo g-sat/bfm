@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from 'react';
-import { Montserrat } from 'next/font/google';
+import { Montserrat, Poppins } from 'next/font/google';
 import gsap from 'gsap';
 
 const montserrat = Montserrat({ subsets: ['latin'], weight: '800' });
-
+const montserrat_2 = Poppins({ subsets: ['latin'], weight: '300' });
 export function HeroText() {
   const textRef = useRef<HTMLHeadingElement>(null);
 
@@ -15,7 +15,7 @@ export function HeroText() {
       
       // Manually split into two lines
       const line1 = 'BOLD FRAME';
-      const line2 = 'MEDIA';
+      const line2 = 'Media';
       
       // Create character spans for each line
       const createSpans = (text: string) => {
@@ -69,10 +69,20 @@ export function HeroText() {
     <main>
       <h1
         ref={textRef}
-        className={`${montserrat.className} text-5xl sm:text-6xl md:text-8xl lg:text-[7rem] text-[10vw] max-text-[10rem] font-bold text-white drop-shadow-2xl select-none pointer-events-none pl-4 sm:pl-8 md:pl-12 hero-text-responsive leading-tight`}
+        className={`${montserrat.className} text-5xl sm:text-5xl md:text-6xl lg:text-[5.5rem] text-[6vw] max-text-[6rem] font-bold text-white drop-shadow-2xl select-none pointer-events-none pl-4 sm:pl-8 md:pl-12 hero-text-responsive 
+          ${montserrat.className}
+          text-4xl sm:text-4xl md:text-5xl lg:text-[5.5rem] text-[5vw] 
+          font-bold text-white drop-shadow-2xl select-none pointer-events-none 
+          pl-4 sm:pl-8 md:pl-12 hero-text-responsive 
+          leading-none    /* ← THIS reduces line spacing */
+        `}
       >
-        Bold Frame Media
+                              
       </h1>
+      <h3
+        className={`px-13 ${montserrat_2.className} md:text-lg py-5 tracking-wide`}
+      >
+        Bold your BRAND, Bold your STORY, with us!</h3>
     </main>
     
   );

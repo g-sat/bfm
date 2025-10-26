@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     icon: './BFM Icon Red Shadowed.svg'
   },
   title: "BFM",
-  description: "The key to infinite creative origins",
+  description: "Bold your BRAND, Bold your STORY, with us!",
 };
 
 export default function RootLayout({

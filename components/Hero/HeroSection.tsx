@@ -2,7 +2,7 @@
 
 export const HeroSection = () => {
   return (
-    <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
+    <div className="relative z-10 flex flex-col items-center justify-center px-4">
       <div className="text-center space-y-4">
         <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight">
           Next Generation
