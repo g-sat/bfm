@@ -135,7 +135,7 @@ export default function AudioPlayer() {
         }}
       >
         <div className="w-12 h-12 bg-white/10 backdrop-blur-md border border-white/30 rounded-full flex items-center justify-center cursor-pointer transition-all hover:bg-white/20 hover:scale-110">
-          <Music className="w-6 h-6 text-cyan-300" />
+          <Music className="w-6 h-6 text-orange-700" />
         </div>
       </div>
 
@@ -154,12 +154,12 @@ export default function AudioPlayer() {
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-gradient-to-r from-cyan-400 to-purple-400 rounded-full animate-pulse" />
+            <div className="w-2 h-2 bg-gradient-to-r from-red-700 to-purple-900 rounded-full animate-pulse" />
             <span className="text-white/80 text-sm font-medium">Now Playing</span>
           </div>
           <div
             className={`w-2 h-2 rounded-full transition-all ${
-              isPlaying ? "bg-green-400 animate-ping" : "bg-gray-500/50"
+              isPlaying ? "bg-orange-800 animate-ping" : "bg-gray-500/50"
             }`}
           />
         </div>
@@ -175,9 +175,9 @@ export default function AudioPlayer() {
             aria-label={isMuted ? "Unmute" : "Mute"}
           >
             {isMuted ? (
-              <VolumeX className="w-5 h-5 text-cyan-300" />
+              <VolumeX className="w-5 h-5 text-red-600" />
             ) : (
-              <Volume2 className="w-5 h-5 text-cyan-300" />
+              <Volume2 className="w-5 h-5 text-red-600" />
             )}
           </button>
 
@@ -197,11 +197,11 @@ export default function AudioPlayer() {
                          [&::-webkit-slider-thumb]:appearance-none
                          [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5
                          [&::-webkit-slider-thumb]:bg-gradient-to-r
-                         [&::-webkit-slider-thumb]:from-cyan-400 [&::-webkit-slider-thumb]:to-purple-400
+                         [&::-webkit-slider-thumb]:from-red-800 [&::-webkit-slider-thumb]:to-purple-900
                          [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-lg
                          [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5
                          [&::-moz-range-thumb]:bg-gradient-to-r
-                         [&::-moz-range-thumb]:from-cyan-400 [&::-moz-range-thumb]:to-purple-400
+                         [&::-moz-range-thumb]:from-red-800 [&::-moz-range-thumb]:to-purple-900
                          [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:shadow-lg"
               style={{
                 background: `linear-gradient(to right,
@@ -210,7 +210,7 @@ export default function AudioPlayer() {
               }}
             />
 
-            <span className="text-cyan-300 text-xs w-8 text-right">
+            <span className="text-orange-800 text-xs w-8 text-right">
               {Math.round(volume * 100)}%
             </span>
           </div>
@@ -221,7 +221,7 @@ export default function AudioPlayer() {
           {Array.from({ length: 6 }, (_, i) => (
             <div
               key={i}
-              className="flex-1 bg-gradient-to-t from-cyan-400/50 to-purple-400/50 rounded animate-bounce"
+              className="flex-1 bg-gradient-to-t from-red-600/50 to-purple-900/50 rounded animate-bounce"
               style={{
                 animationDelay: `${i * 80}ms`,
                 opacity: isPlaying ? 1 : 0.3,
