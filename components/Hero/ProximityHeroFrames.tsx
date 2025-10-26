@@ -315,7 +315,7 @@ export const ProximityHeroFrames: React.FC<ProximityHeroFramesProps> = ({
       ref={containerRef}
       className={`relative w-full min-h-screen ${className}`}
     >
-      <div className="absolute inset-0 grid grid-cols-8 grid-rows-6 gap-2 p-8">
+      <div className="absolute inset-0 grid grid-cols-8 grid-rows-6 gap-1 p-2">
         {frames.map((frame) => {
           const frameData = activeFrames.get(frame.id);
           const isActive = frameData !== undefined;
@@ -331,7 +331,7 @@ export const ProximityHeroFrames: React.FC<ProximityHeroFramesProps> = ({
               className="relative overflow-hidden rounded-xl"
             >
               <div className="h-full w-full rounded-xl">
-                <div className="relative h-full flex flex-col items-center justify-center p-4 space-y-2">
+                <div className="relative h-full flex flex-col items-center justify-center p-2 space-y-2">
                   <div className={`relative w-full h-full transition-all duration-300 ${isActive ? 'opacity-40' : 'opacity-0'}`}>
                     <Image
                       src={frame.imagePath}
