@@ -25,10 +25,10 @@ export function Navbar() {
         {/* SVG Logo */}
         <a href="#" className="flex items-center">
           <Image
-            src="/nav_bmf.svg"
+            src="/BFM_Main2_White.png"
             alt="Bolt Frame Media Logo"
-            width={150}
-            height={150}
+            width={100}
+            height={100}
             className="hover:brightness-75 transition-all duration-200"
             priority
           />
@@ -50,4 +50,3 @@ export function Navbar() {
   );
 }
 
-  
