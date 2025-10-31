@@ -56,7 +56,7 @@ export function Hero3D() {
 
   return (
     // no ref needed since listening globally
-    <div className="h-screen w-full pointer-events-auto bg-transparent pr-18">
+    <div className="h-screen w-full pointer-events-auto bg-transparent">
       <Canvas
         camera={{ position: [2, 0, 6], fov: 45 }}
         className="h-full w-full pointer-events-none"
@@ -65,7 +65,7 @@ export function Hero3D() {
       >
         <ambientLight intensity={0.6} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
-        <group ref={modelRef} position={[0, 0, 0]} scale={1}>
+        <group ref={modelRef} position={[0, 0, 0]} scale={0.8}>
           <Model />
         </group>
       </Canvas>

@@ -5,44 +5,53 @@ import { Navbar } from "../components/Overalls/Navbar";
 import LaserFlow from "@/components/Hero/LaserFlow";
 import BentoGrid from "@/components/About/MagicBento";
 import AudioPlayer from "@/components/Overalls/Audio";
+import HeroMarquee from "@/components/Overalls/Marquee";
 
 export default function Home() {
   return (
     <main className="relative min-h-screen">
-      {/* Next.js AUTOMATICALLY shows app/loading.tsx */}
-      <Navbar/>
+
+      <Navbar />
       <AudioPlayer />
-      {/* Full-width Section - HERO + FRAMES */}
-      <div className="relative w-full h-screen">
+
+      {/* ────────────────────── HERO SECTION ────────────────────── */}
+      <div className="relative flex justify-center items-center min-h-screen">
+
+          {/* 1. PROXIMITY FRAMES – hover target */}
+          <div className="absolute inset-0 z-10 pointer-events-auto">
+            <ProximityHeroFrames className="h-full w-full" />
+          </div>
+        {/* 80 % container – centered */}
+        <div className="relative w-full max-w-[80vw] h-screen flex flex-col">
+        {/* Content that fills vertical space */}
+        <div className="flex-grow relative">
+          {/* 3D Model */}
+          <div className="absolute top-0 right-0 w-1/3 h-full z-25 pointer-events-none">
+            <Hero3D />
+          </div>
+          {/* Hero Text */}
+          <div className="absolute inset-0 flex items-center justify-start pl-16 z-25 pointer-events-none">
+            <HeroText />
+          </div>
+        </div>
         
-        {/* 1. PROXIMITY FRAMES - HOVER TARGET (z-10) */}
-        <div className="absolute inset-0 z-10 pointer-events-auto">
-          <ProximityHeroFrames className="h-full w-full" />
-        </div>
-
-        {/* 2. LASERFLOW - VISUALLY FRONT BUT MOUSE PASSES THROUGH (z-20) */}
-        <div className="absolute inset-0 z-20 pointer-events-none">
-          <LaserFlow 
-            color="#FF4444"
-            fogIntensity={0.9}
-            wispIntensity={5}
-            flowSpeed={0.3}
-          />
-        </div>
-
-        {/* 3. 3D Model Overlay (right 1/3) */}
-        <div className="absolute top-0 right-0 w-1/3 h-screen z-25 pointer-events-none">
-          <Hero3D />
-        </div>
-
-        {/* 4. Hero Text Overlay (left-aligned) */}
-        <div className="absolute inset-0 flex items-center justify-start pl-16 z-25 pointer-events-none">
-          <HeroText />
+        {/* Bottom Marquee */}
+        <div className="relative">
+          <HeroMarquee />
+          <HeroMarquee direction="right" />
         </div>
       </div>
-      <div className="relative w-full h-full">
+        
+      </div>
+
+      {/* ────────────────────── BENTO GRID ────────────────────── */}
+      <div className="relative w-full h-full border-r-4">
         <BentoGrid />
       </div>
+
     </main>
   );
 }
+
+
+

@@ -3,11 +3,9 @@ import AnalogClock from './AnalogClock';
 
 const BentoGrid = () => {
   return (
-    <section className="flex items-center justify-center min-h-[70vh] bg-gradient-to-t from-[#1a0017] to-[#0a0a0a] p-8 overflow-hidden relative">
+    <section className="flex items-center justify-center min-h-[70vh] bg-white p-8 overflow-hidden relative">
       {/* Subtle cinematic particle background */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute bottom-10 left-1/4 w-96 h-96 bg-gradient-to-r from-[#ff4d4d]/20 to-[#1a0000]/20 rounded-full blur-3xl animate-pulse"></div>
-      </div>
+      
       
       <div className="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-12 gap-6 max-w-[80%] w-full relative z-10 border border-white/10 rounded-3xl p-6 bg-black/30 backdrop-blur-sm">
         {/* Large Hero Card - spans 2 cols + 2 rows */}
@@ -77,3 +75,7 @@ const BentoGrid = () => {
 };
 
 export default BentoGrid;
+
+
+
+//bg-gradient-to-t from-[#1a0017] to-[#0a0a0a]
