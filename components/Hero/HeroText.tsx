@@ -123,7 +123,7 @@ export function HeroText() {
         className=" cursor-pointer
           relative z-10 overflow-hidden rounded-full border border-white/60 bg-[#d1d1d1]
           flex items-center justify-center uppercase font-bold h-10 px-16 text-black
-          transition-colors transition-all duration-200 tracking-tight
+          transition-colors duration-200 tracking-tight
           space-x-1 sm:pl-[59px] sm:pr-[52px]
         "
       >
