@@ -68,7 +68,8 @@ export function HeroText() {
   }, []);
 
   const buttonRef = useRef<HTMLAnchorElement>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: -60 }); // Start centered vertically
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
     const button = buttonRef.current;
@@ -76,26 +77,35 @@ export function HeroText() {
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = button.getBoundingClientRect();
-      const x = e.clientX - rect.left; // x inside button
-      const y = e.clientY - rect.top;  // y inside button
+      // Get cursor position relative to button
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
 
-      // Center the 204px-wide blob under cursor (204 / 2)
-      const blobX = x - 102;
-      const blobY = y - 60;
+      setMousePos({ x, y });
+    };
 
-      setMousePos({ x: blobX, y: blobY });
+    const handleMouseEnter = () => {
+      setIsHovering(true);
     };
 
     const handleMouseLeave = () => {
-      // Animate blob back to center vertically above button text
-      setMousePos({ x: 0, y: -60 });
+      setIsHovering(false);
+      // Reset to center when leaving
+      const rect = button.getBoundingClientRect();
+      setMousePos({ x: rect.width / 2, y: rect.height / 2 });
     };
 
     button.addEventListener('mousemove', handleMouseMove);
+    button.addEventListener('mouseenter', handleMouseEnter);
     button.addEventListener('mouseleave', handleMouseLeave);
+
+    // Initialize at center
+    const rect = button.getBoundingClientRect();
+    setMousePos({ x: rect.width / 2, y: rect.height / 2 });
 
     return () => {
       button.removeEventListener('mousemove', handleMouseMove);
+      button.removeEventListener('mouseenter', handleMouseEnter);
       button.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, []);
@@ -120,49 +130,57 @@ export function HeroText() {
       <a
         ref={buttonRef}
         href="https://front.hc.engineering/workbench/platform"
-        className=" cursor-pointer
-          relative z-10 overflow-hidden rounded-full border border-white/60 bg-[#d1d1d1]
-          flex items-center justify-center uppercase font-bold h-10 px-16 text-black
-          transition-colors duration-200 tracking-tight
-          space-x-1 sm:pl-[59px] sm:pr-[52px]
+        className="cursor-pointer pointer-events-auto relative z-20 overflow-hidden rounded-full border border-white/60 bg-[#d1d1d1]
+          inline-flex w-fit items-center justify-center uppercase font-bold h-10 px-8 text-black
+          transition-colors duration-200 tracking-tight space-x-1
         "
-      >
-        {/* Gradient “blob” container */}
+      >   {/* button styling */}
+        {/* Gradient "blob" container */}
         <div
-          className="absolute -z-10 flex w-[204px] items-center justify-center"
+          className="absolute inset-0 pointer-events-none"
           style={{
-            top: '50%',
-            left: 0,
-            transform: `translateX(${mousePos.x}px) translateY(${mousePos.y}px) translateZ(0)`,
-            transition: 'transform 0.4s cubic-bezier(0.17, 0.67, 0.12, 0.98)',
+            opacity: isHovering ? 1 : 0.5,
+            transition: 'opacity 0.3s ease',
           }}
         >
-          {/* Inner radial gradient circle */}
           <div
-            className="
-              absolute top-1/2 h-[121px] w-[121px] -translate-y-1/2
-              bg-[radial-gradient(50%_50%_at_50%_50%,#FFFFF5_3.5%,#FFAA81_26.5%,#FFDA9F_37.5%,rgba(255,170,129,0.50)_49%,rgba(210,106,58,0.00)_92.5%)]
-            "
-          />
-          {/* Outer blurred radial gradient */}
-          <div
-            className="
-              absolute top-1/2 h-[103px] w-[204px] -translate-y-1/2
-              bg-[radial-gradient(43.3%_44.23%_at_50%_49.51%,#FFFFF7_29%,#FFFACD_48.5%,#F4D2BF_60.71%,rgba(214,211,210,0.00)_100%)]
-              blur-[5px]
-            "
-          />
+            className="absolute flex w-[204px] h-[121px] items-center justify-center"
+            style={{
+              left: `${mousePos.x}px`,
+              top: `${mousePos.y}px`,
+              transform: 'translate(-50%, -50%)',
+              transition: isHovering 
+                ? 'left 0.2s cubic-bezier(0.17, 0.67, 0.12, 0.98), top 0.2s cubic-bezier(0.17, 0.67, 0.12, 0.98)'
+                : 'left 0.4s ease, top 0.4s ease, opacity 0.3s ease',
+            }}
+          >
+            {/* Inner radial gradient circle */}
+            <div
+              className="
+                absolute h-[121px] w-[121px]
+                bg-[radial-gradient(50%_50%_at_50%_50%,#FFFFF5_3.5%,#FFAA81_26.5%,#FFDA9F_37.5%,rgba(255,170,129,0.50)_49%,rgba(210,106,58,0.00)_92.5%)]
+              "
+            />
+            {/* Outer blurred radial gradient */}
+            <div
+              className="
+                absolute h-[103px] w-[204px]
+                bg-[radial-gradient(43.3%_44.23%_at_50%_49.51%,#FFFFF7_29%,#FFFACD_48.5%,#F4D2BF_60.71%,rgba(214,211,210,0.00)_100%)]
+                blur-[5px]
+              "
+            />
+          </div>
         </div>
 
         {/* Button text */}
-        <span className="text-[#5A250A]">See in Action</span>
+        <span className="relative z-10 text-[#5A250A]">See in Action</span>
 
         {/* Arrow icon */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 17 9"
-          className="h-[9px] w-[17px] text-[#5A250A]"
+          className="relative z-10 h-[9px] w-[17px] text-[#5A250A]"
         >
           <path
             fill="currentColor"

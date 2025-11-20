@@ -16,10 +16,10 @@ export const HeroSection = () => {
         </div>
 
         <div className="mt-16 flex gap-4 justify-center">
-          <button className="px-8 py-4 bg-white text-slate-900 rounded-xl font-semibold text-lg transition-all hover:scale-105 hover:shadow-2xl hover:shadow-white/20">
+          <button className="px-6 py-3 bg-white text-slate-900 rounded-xl font-semibold text-lg transition-all hover:scale-105 hover:shadow-2xl hover:shadow-white/20">
             Get Started
           </button>
-          <button className="px-8 py-4 bg-white/10 text-white rounded-xl font-semibold text-lg backdrop-blur-sm border border-white/20 transition-all hover:bg-white/20 hover:scale-105">
+          <button className="px-6 py-3 bg-white/10 text-white rounded-xl font-semibold text-lg backdrop-blur-sm border border-white/20 transition-all hover:bg-white/20 hover:scale-105">
             Learn More
           </button>
         </div>
