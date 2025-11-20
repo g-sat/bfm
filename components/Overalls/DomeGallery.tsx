@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useMemo, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { useGesture } from '@use-gesture/react';
@@ -22,6 +23,7 @@ type DomeGalleryProps = {
   imageBorderRadius?: string;
   openedImageBorderRadius?: string;
   grayscale?: boolean;
+  autoRotateSpeed?: number; // degrees per second
 };
 
 type ItemDef = {
@@ -168,7 +170,7 @@ export default function DomeGallery({
   minRadius = 600,
   maxRadius = Infinity,
   padFactor = 0.25,
-  overlayBlurColor = '#060010',
+  overlayBlurColor = '#0a0a0a',
   maxVerticalRotationDeg = DEFAULTS.maxVerticalRotationDeg,
   dragSensitivity = DEFAULTS.dragSensitivity,
   enlargeTransitionMs = DEFAULTS.enlargeTransitionMs,
@@ -178,7 +180,8 @@ export default function DomeGallery({
   openedImageHeight = '400px',
   imageBorderRadius = '30px',
   openedImageBorderRadius = '30px',
-  grayscale = true
+  autoRotateSpeed = 5,
+  grayscale = false
 }: DomeGalleryProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
@@ -795,12 +798,29 @@ export default function DomeGallery({
     }
   `;
 
+  useEffect(() => {
+    let raf: number;
+    let last = performance.now();
+    const loop = (now: number) => {
+      const dt = (now - last) / 1000;
+      last = now;
+      // pause during drag or when an item is focused/enlarged
+      if (!draggingRef.current && !focusedElRef.current && rootRef.current?.getAttribute('data-enlarging') !== 'true') {
+        rotationRef.current.y = wrapAngleSigned(rotationRef.current.y + autoRotateSpeed * dt);
+        applyTransform(rotationRef.current.x, rotationRef.current.y);
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [autoRotateSpeed]);
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
       <div
         ref={rootRef}
-        className="sphere-root relative w-full h-full"
+        className="sphere-root relative w-full min-h-[80vh]"
         style={
           {
             '--segments-x': segments,
@@ -846,7 +866,7 @@ export default function DomeGallery({
                   }
                 >
                   <div
-                    className="item__image absolute block overflow-hidden cursor-pointer bg-gray-200 transition-transform duration-300"
+                    className="item__image absolute block overflow-hidden cursor-pointer bg-gray-500 transition-transform duration-300"
                     role="button"
                     tabIndex={0}
                     aria-label={it.alt || 'Open image'}

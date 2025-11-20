@@ -3,7 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import AnalogClock from './AnalogClock';
 import { BentoItem } from './BentoItem';
-import DomeGallery from '../Overalls/DomeGallery';
+// import DomeGallery from '../Overalls/DomeGallery';
 
 const BentoGrid = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -32,7 +32,7 @@ const BentoGrid = () => {
     <section
       ref={containerRef}
       id="about-section"
-      className="relative flex items-center justify-center min-h-screen w-full overflow-hidden bg-white p-4 md:p-8"
+      className="relative flex items-center justify-center min-h-screen w-full overflow-hidden bg-black p-4 md:p-8"
       style={
         {
           '--mouse-x': '50%',
@@ -112,7 +112,7 @@ const BentoGrid = () => {
           description="Let's build something amazing together."
         >
           <div>
-            <DomeGallery />
+            {/* <DomeGallery /> */}
           </div>
         </BentoItem>
       </motion.div>
