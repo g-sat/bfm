@@ -1,37 +1,64 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 
 const AnalogClock: React.FC = () => {
   const clockRef = useRef<HTMLDivElement | null>(null);
+  const rotationStateRef = useRef({
+    hourBase: 0,
+    minuteBase: 0,
+    secondBase: 0,
+    prevHourValue: 0,
+    prevMinuteValue: 0,
+    prevSecondValue: 0,
+  });
 
   useEffect(() => {
     const updateClock = () => {
       const now = new Date();
-      const options: Intl.DateTimeFormatOptions = {
-        timeZone: 'Asia/Kolkata',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        hour12: false,
-      };
-      const formatter = new Intl.DateTimeFormat('en-US', options);
-      const parts = formatter.formatToParts(now);
-      const hour = parseInt(parts.find((p) => p.type === 'hour')?.value || '0') % 12;
-      const minute = parseInt(parts.find((p) => p.type === 'minute')?.value || '0');
-      const second = parseInt(parts.find((p) => p.type === 'second')?.value || '0');
+      const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+      const istDate = new Date(utc + 330 * 60000);
+
+      const rawHour = istDate.getHours() % 12;
+      const minute = istDate.getMinutes();
+      const second = istDate.getSeconds();
+      const millisecond = istDate.getMilliseconds();
+
+      const secondValue = second + millisecond / 1000;
+      const minuteValue = minute + secondValue / 60;
+      const hourValue = rawHour + minuteValue / 60;
+
+      const rotationState = rotationStateRef.current;
+
+      if (secondValue < rotationState.prevSecondValue) {
+        rotationState.secondBase += 360;
+      }
+      const secondAngle = rotationState.secondBase + secondValue * 6;
+      rotationState.prevSecondValue = secondValue;
+
+      if (minuteValue < rotationState.prevMinuteValue) {
+        rotationState.minuteBase += 360;
+      }
+      const minuteAngle = rotationState.minuteBase + minuteValue * 6;
+      rotationState.prevMinuteValue = minuteValue;
+
+      if (hourValue < rotationState.prevHourValue) {
+        rotationState.hourBase += 360;
+      }
+      const hourAngle = rotationState.hourBase + hourValue * 30;
+      rotationState.prevHourValue = hourValue;
 
       // Update hand rotations
-      const hourHand = clockRef.current?.querySelector('.hand.hour') as HTMLElement | null;
-      const minuteHand = clockRef.current?.querySelector('.hand.minute') as HTMLElement | null;
-      const secondHand = clockRef.current?.querySelector('.hand.second') as HTMLElement | null;
+      const hourHand = clockRef.current?.querySelector(".hand.hour") as HTMLElement | null;
+      const minuteHand = clockRef.current?.querySelector(".hand.minute") as HTMLElement | null;
+      const secondHand = clockRef.current?.querySelector(".hand.second") as HTMLElement | null;
 
-      if (hourHand) hourHand.style.transform = `rotate(${hour * 30 + minute * 0.5}deg)`;
-      if (minuteHand) minuteHand.style.transform = `rotate(${minute * 6}deg)`;
-      if (secondHand) secondHand.style.transform = `rotate(${second * 6}deg)`;
+      if (hourHand) hourHand.style.transform = `rotate(${hourAngle}deg)`;
+      if (minuteHand) minuteHand.style.transform = `rotate(${minuteAngle}deg)`;
+      if (secondHand) secondHand.style.transform = `rotate(${secondAngle}deg)`;
     };
 
     updateClock(); // Initial update
-    const interval = setInterval(updateClock, 1000); // Update every second
+    const interval = setInterval(updateClock, 150); // Update regularly for smoother motion
 
     return () => clearInterval(interval); // Cleanup on unmount
   }, []);

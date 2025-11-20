@@ -6,8 +6,6 @@ import { Hero3D } from "../components/Hero/Hero3D";
 import { HeroText } from "../components/Hero/HeroText";
 // Import the global navigation bar component.
 import { Navbar } from "../components/Overalls/Navbar";
-// Import the ambient audio player overlay.
-import AudioPlayer from "@/components/Overalls/Audio";
 // Import the 3D dome gallery showcase.
 import DomeGallery from "@/components/Overalls/DomeGallery";
 
@@ -19,23 +17,21 @@ export default function Home() {
     <main className="relative min-h-screen">
       {/* Insert the top-level navigation bar. */}
       <Navbar />
-      {/* Mount the background audio controller. */}
-      <AudioPlayer />
       {/* Wrap the hero and gallery within a unified container. */}
       <div className="relative min-h-[200vh]"> {/* Extend min-height to ensure full coverage for hero + gallery */}
         {/* Inject the shared atmospheric gradient background, extended to cover both sections. */}
         <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-          {/* Add a blue-violet radial glow anchored near the top-left, extended downward. */}
-          <div className="absolute -inset-[120px] bg-[radial-gradient(circle_at_20%_-10%,rgba(129,140,248,0.35),transparent_65%)] blur-3xl" /> {/* Increased from -inset-32 to -inset-[120px] for gallery coverage */}
+          {/* Add a blue-violet radial glow anchored near the top-left without washing the gallery. */}
+          <div className="absolute -top-32 -left-32 h-[50vh] w-[65vw] bg-[radial-gradient(circle_at_20%_-20%,rgba(129,140,248,0.32),transparent_68%)] blur-3xl" />
           {/* Add a pink radial glow anchored near the right side, extended downward. */}
-          <div className="absolute -inset-[150px] bg-[radial-gradient(circle_at_80%_30%,rgba(244,114,182,0.18),transparent_70%)] blur-3xl" /> Increased from -inset-40 to -inset-[150px] for gallery coverage
+          <div className="absolute -inset-[150px] bg-[radial-gradient(circle_at_80%_30%,rgba(244,114,182,0.18),transparent_70%)] blur-3xl" />
           {/* Overlay a subtle vertical gradient for depth across the entire page. */}
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,7,12,0.95)0%,rgba(5,6,11,0.85)45%,rgba(4,5,9,0.92)65%,rgba(2,3,6,0.98)100%)]" />
         </div>
         {/* Lay out the hero section with centered content and overflow hidden. */}
-        <div className="relative flex justify-center items-center min-h-screen overflow-hidden">
+        <div className="relative flex justify-center items-center min-h-screen h-[120vh] overflow-hidden">
           {/* Restore the focused purple-blue hero glow. */}
-          <div className="absolute -inset-24 z-0 opacity-85 bg-[radial-gradient(circle_at_45%_-25%,rgba(99,102,241,0.45),transparent_70%)] blur-3xl pointer-events-none" />
+          <div className="absolute -top-32 left-1/2 z-0 h-[80vh] w-[70vw] -translate-x-1/2 opacity-80 bg-[radial-gradient(circle_at_50%_-40%,rgba(99,102,241,0.38),transparent_68%)] blur-3xl pointer-events-none" />
           {/* Draw a vertical accent beam on the left edge. */}
           <div className="absolute inset-y-12 left-12 w-px z-10 bg-linear-to-b from-purple-500/40 via-white/40 to-transparent pointer-events-none" />
           {/* Place the proximity-sensitive frame grid overlay. */}
@@ -58,7 +54,7 @@ export default function Home() {
             {/* Render the CTA band with descriptive text and actions. */}
             <div className="relative z-15 pointer-events-none flex flex-col md:flex-row md:items-end justify-between gap-8 pl-16 pb-12 text-white">
               {/* Provide the headline, subheadline, and supporting copy. */}
-              <div className="max-w-xl space-y-4 text-balance pointer-events-none">
+              <div className="max-w-xl space-y-4 pt-4 text-balance pointer-events-none">
                 {/* Label the section with a stylized kicker. */}
                 <p className="text-xs md:text-sm uppercase tracking-[0.5em] text-white/60">Immersive Futures</p>
                 {/* Deliver the primary hero headline. */}
@@ -71,7 +67,7 @@ export default function Home() {
                 </p>
               </div>
               {/* Present the CTA button and feature list. */}
-              <div className="flex flex-col items-start md:items-end gap-4 md:gap-6 text-xs md:text-sm pointer-events-none">
+              <div className="flex flex-col items-start md:items-end gap-4 md:gap-6 text-xs md:text-sm pointer-events-none pt-8">
                 {/* Offer the primary call-to-action button with hover feedback. */}
                 <button className="rounded-full border border-white/40 bg-white/5 px-7 py-3 text-[0.7rem] md:text-sm font-medium uppercase tracking-[0.4em] transition hover:border-white/80 hover:bg-white/10 pointer-events-auto">
                   Enter the Dome
@@ -93,7 +89,6 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-b from-transparent via-black/20 to-transparent z-20 pointer-events-none" /> {/* Softened via-black/35 to /20 for subtler transition */}
         {/* Render the dome gallery beneath the hero content, without overriding background. */}
         <div className="relative overflow-hidden "> {/* Added min-h-screen for consistent section height */}
-         
           <DomeGallery />
         </div>
       </div>
