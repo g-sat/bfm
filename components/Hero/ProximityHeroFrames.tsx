@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import Image from "next/image";
 
 interface Frame {
@@ -38,7 +38,7 @@ export const ProximityHeroFrames: React.FC<ProximityHeroFramesProps> = ({
   const waveTimerRef = useRef<NodeJS.Timeout | null>(null);
   const wavePausedRef = useRef<boolean>(false);
 
-  const frames: Frame[] = [
+  const frames: Frame[] = useMemo(() => [
     { id: 0, gridColumn: 'span 2', gridRow: 'span 2', delay: 0, imagePath: '/assets/frames/AE 01.png', color: 'from-white to-white/80', title: 'Innovation' },
     { id: 1, gridColumn: 'span 1', gridRow: 'span 1', delay: 0.05, imagePath: '/assets/frames/AE 02.png', color: 'from-white to-white/80', title: 'Speed' },
     { id: 2, gridColumn: 'span 1', gridRow: 'span 1', delay: 0.1, imagePath: '/assets/frames/AE 03.png', color: 'from-white to-white/80', title: 'Design' },
@@ -75,7 +75,7 @@ export const ProximityHeroFrames: React.FC<ProximityHeroFramesProps> = ({
     { id: 33, gridColumn: 'span 1', gridRow: 'span 1', delay: 0, imagePath: '/assets/frames/PR 10.png', color: 'from-white to-white/80', title: 'Dolly Shot' },
     { id: 34, gridColumn: 'span 1', gridRow: 'span 1', delay: 0.05, imagePath: '/assets/frames/PR 11.png', color: 'from-white to-white/80', title: 'Frame Rate' },
     { id: 35, gridColumn: 'span 1', gridRow: 'span 1', delay: 0.1, imagePath: '/assets/frames/PR 12.png', color: 'from-white to-white/80', title: 'Screenplay' },
-  ];
+  ], []);
 
   // Compute neighbors based on approximate grid positions
   useEffect(() => {
