@@ -2,10 +2,10 @@ import { ProximityHeroFrames } from "../components/Hero/ProximityHeroFrames";
 import { Hero3D } from "../components/Hero/Hero3D";
 import { HeroText } from "../components/Hero/HeroText";
 import { Navbar } from "../components/Overalls/Navbar";
-import LaserFlow from "@/components/Hero/LaserFlow";
+// import LaserFlow from "@/components/Hero/LaserFlow";
 import BentoGrid from "@/components/About/MagicBento";
 import AudioPlayer from "@/components/Overalls/Audio";
-import HeroMarquee from "@/components/Overalls/Marquee";
+// import HeroMarquee from "@/components/Overalls/Marquee";
 
 export default function Home() {
   return (
@@ -24,7 +24,7 @@ export default function Home() {
         {/* 80 % container – centered */}
         <div className="relative w-full max-w-[80vw] h-screen flex flex-col">
         {/* Content that fills vertical space */}
-        <div className="flex-grow relative">
+        <div className="grow relative">
           {/* 3D Model */}
           <div className="absolute top-0 right-0 w-1/3 h-full z-25 pointer-events-none">
             <Hero3D />
@@ -35,11 +35,11 @@ export default function Home() {
           </div>
         </div>
         
-        {/* Bottom Marquee */}
+        {/* Bottom Marquee
         <div className="relative">
           <HeroMarquee />
           <HeroMarquee direction="right" />
-        </div>
+        </div> */}
       </div>
         
       </div>

@@ -106,7 +106,7 @@ export function HeroText() {
         ref={textRef}
         className={`
           ${montserrat.className}
-          text-4xl sm:text-4xl md:text-5xl lg:text-[5.5rem] text-[6vw] max-text-[6rem]
+          text-4xl sm:text-4xl md:text-7xl lg:text-[6.6rem] text-[7vw] max-text-[6rem]
           font-bold text-white drop-shadow-2xl select-none pointer-events-none
           hero-text-responsive leading-none
         `}

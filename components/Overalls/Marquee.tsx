@@ -74,7 +74,7 @@ export default function HeroMarquee({ direction = "left" }) {
         style={{
           display: "flex",
           width: `${SET_WIDTH * repeatCount}px`,
-          animation: `${animationName} 100s linear infinite`,
+          animation: `${animationName} 150s linear infinite`,
           whiteSpace: "nowrap",
         }}
       >
