@@ -1,10 +1,20 @@
 @import "tailwindcss";
+
+/* @tailwind base;
+@tailwind components; */
+
+
+/* @tailwind utilities; */
+
+
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap'); */
+
 :root {
     --background: #ffffff;
     --foreground: #171717;
 }
 
-@theme inline {
+:root {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --font-sans: var(--font-geist-sans);
@@ -36,8 +46,298 @@ body {
     .hero-text-responsive {
         font-size: 8vw !important;
         /* Smaller font for very small screens */
-        max-font-size: 2.5rem !important;
         padding-left: 1rem !important;
         /* Tighter padding */
     }
+}
+
+
+/* @layer components {
+    .bento-card {
+        @apply bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 text-white font-inter transition-transform duration-300 shadow-lg hover: -translate-y-1 hover: shadow-xl;
+    }
+} */
+
+
+/* Analog Clock Styles */
+
+.analog-clock-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0.2) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    max-width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.clock {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    border: 6px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0.4) 100%);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.marker {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.marker-line {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    width: 2px;
+    height: 12%;
+    background: rgba(255, 255, 255, 0.7);
+    transform-origin: 50% 100%;
+    border-radius: 1px;
+}
+
+.marker:nth-child(3n+1) .marker-line {
+    height: 15%;
+    background: #ff4d4d;
+    width: 4px;
+    box-shadow: 0 0 8px rgba(255, 77, 77, 0.5);
+}
+
+.marker-number {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.hands {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: bottom center;
+    border-radius: 3px;
+    transform: translateX(-50%);
+    transition: transform 0.1s cubic-bezier(0.4, 2.0, 0.2, 1);
+}
+
+.hand.hour {
+    width: 5px;
+    height: 70px;
+    background: #ffffff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+.hand.minute {
+    width: 4px;
+    height: 90px;
+    background: #b0b0b0;
+    box-shadow: 0 0 6px rgba(176, 176, 176, 0.5);
+}
+
+.hand.second {
+    width: 2px;
+    height: 100px;
+    background: #ff4d4d;
+    box-shadow: 0 0 12px rgba(255, 77, 77, 0.8);
+}
+
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    background: #ff4d4d;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 12px rgba(255, 77, 77, 0.9);
+}
+
+.timezone-label {
+    margin-top: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+
+/* Responsive adjustments */
+
+@media (max-width: 480px) {
+    .clock {
+        width: 180px;
+        height: 180px;
+    }
+    .hand.hour {
+        height: 50px;
+    }
+    .hand.minute {
+        height: 70px;
+    }
+    .hand.second {
+        height: 80px;
+    }
+    .marker-number {
+        font-size: 12px;
+    }
+}
+
+
+/* From Uiverse.io by csemszepp */
+
+.loader {
+    animation: spin 1.5s linear alternate infinite;
+    background: #B73F41;
+    border-radius: 50%;
+    height: 120px;
+    width: 120px;
+}
+
+.loader:before {
+    background: #B73F41;
+    border-radius: 50%;
+    content: '';
+    display: block;
+    height: 0.5em;
+    width: 0.5em;
+    z-index: 2;
+}
+
+.loader:after {
+    background: #262E2A;
+    border-radius: 50%;
+    box-shadow: 0em -2.60em #262E2A, 2.25em -4.02em #000714, 2.25em -1.25em #262E2A, 4.60em 0em #000c22, 2.25em 1.25em #262E2A, 2.25em 4.02em #070707, 0em 2.60em #262E2A, -2.25em 4.02em #080808, -2.25em 1.25em #262E2A, -4.60em 0em #00040c, -2.25em -1.25em #262E2A, -2.25em -4.02em #070707;
+    content: '';
+    display: block;
+    height: 2em;
+    width: 2em;
+}
+
+.inner {
+    animation: load 1.5s linear alternate infinite;
+    border: solid 1px #B73F41;
+    border-radius: 50%;
+    height: 1.75em;
+    width: 1.75em;
+    z-index: 1;
+}
+
+.loader,
+.loader:before,
+.loader:after,
+.inner {
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+@keyframes load {
+    0% {
+        box-shadow: 0em -2.60em #262E2A, 2.25em -1.25em #262E2A, 2.25em 1.25em #262E2A, 0em 2.60em #262E2A, -2.25em 1.25em #262E2A, -2.25em -1.25em #262E2A;
+    }
+    15% {
+        box-shadow: 0em -2.60em #262E2A, 2.25em -1.25em #262E2A, 2.25em 1.25em #262E2A, 0em 2.60em #262E2A, -2.25em 1.25em #262E2A, -2.25em -1.25em #B73F41;
+    }
+    30% {
+        box-shadow: 0em -2.60em #262E2A, 2.25em -1.25em #262E2A, 2.25em 1.25em #262E2A, 0em 2.60em #262E2A, -2.25em 1.25em #B73F41, -2.25em -1.25em #B73F41;
+    }
+    45% {
+        box-shadow: 0em -2.60em #262E2A, 2.25em -1.25em #262E2A, 2.25em 1.25em #262E2A, 0em 2.60em #B73F41, -2.25em 1.25em #B73F41, -2.25em -1.25em #B73F41;
+    }
+    60% {
+        box-shadow: 0em -2.60em #262E2A, 2.25em -1.25em #262E2A, 2.25em 1.25em #B73F41, 0em 2.60em #B73F41, -2.25em 1.25em #B73F41, -2.25em -1.25em #B73F41;
+    }
+    75% {
+        box-shadow: 0em -2.60em #262E2A, 2.25em -1.25em #B73F41, 2.25em 1.25em #B73F41, 0em 2.60em #B73F41, -2.25em 1.25em #B73F41, -2.25em -1.25em #B73F41;
+    }
+    90% {
+        box-shadow: 0em -2.60em #B73F41, 2.25em -1.25em #B73F41, 2.25em 1.25em #B73F41, 0em 2.60em #B73F41, -2.25em 1.25em #B73F41, -2.25em -1.25em #B73F41;
+    }
+    100% {
+        box-shadow: 0em -2.60em #B73F41, 2.25em -1.25em #B73F41, 2.25em 1.25em #B73F41, 0em 2.60em #B73F41, -2.25em 1.25em #B73F41, -2.25em -1.25em #B73F41;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    15% {
+        transform: rotate(60deg);
+    }
+    30% {
+        transform: rotate(120deg);
+    }
+    45% {
+        transform: rotate(180deg);
+    }
+    60% {
+        transform: rotate(240deg);
+    }
+    75% {
+        transform: rotate(300deg);
+    }
+    90% {
+        transform: rotate(360deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+::-webkit-scrollbar {
+    display: none;
+    /* Hides the scrollbar */
+    width: 0;
+    /* Ensures no space is taken by the scrollbar */
+    height: 0;
+}
+
+
+/* For Firefox */
+
+html {
+    scrollbar-width: none;
+    /* Hides the scrollbar */
+}
+
+
+/* For Internet Explorer and Edge (older versions) */
+
+body {
+    -ms-overflow-style: none;
+    /* Hides the scrollbar */
 }
