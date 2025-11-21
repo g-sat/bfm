@@ -8,32 +8,32 @@ import { HeroText } from "../components/Hero/HeroText";
 import { Navbar } from "../components/Overalls/Navbar";
 // Import the 3D dome gallery showcase.
 import DomeGallery from "@/components/Overalls/DomeGallery";
+import About from "@/components/About/About";
 
 // Define the default export for the landing page.
 export default function Home() {
   // Return the rendered structure for the homepage.
   return (
     // Render the main element with relative positioning and full viewport height.
-    <main className="relative min-h-screen">
+    <main className="relative min-h-screen bg-[#05030F] text-white">
       {/* Insert the top-level navigation bar. */}
       <Navbar />
       {/* Wrap the hero and gallery within a unified container. */}
-      <div className="relative min-h-[200vh]"> {/* Extend min-height to ensure full coverage for hero + gallery */}
+      <div className="relative min-h-screen"> {/* Allow hero + gallery to size naturally without excess whitespace */}
         {/* Inject the shared atmospheric gradient background, extended to cover both sections. */}
         <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-          {/* Add a blue-violet radial glow anchored near the top-left without washing the gallery. */}
-          <div className="absolute -top-32 -left-32 h-[50vh] w-[65vw] bg-[radial-gradient(circle_at_20%_-20%,rgba(129,140,248,0.32),transparent_68%)] blur-3xl" />
-          {/* Add a pink radial glow anchored near the right side, extended downward. */}
-          <div className="absolute -inset-[150px] bg-[radial-gradient(circle_at_80%_30%,rgba(244,114,182,0.18),transparent_70%)] blur-3xl" />
-          {/* Overlay a subtle vertical gradient for depth across the entire page. */}
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,7,12,0.95)0%,rgba(5,6,11,0.85)45%,rgba(4,5,9,0.92)65%,rgba(2,3,6,0.98)100%)]" />
+          {/* Shared atmospheric gradients bring hero + about into the same palette. */}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,3,15,0.95)0%,rgba(6,4,20,0.92)45%,rgba(7,5,24,0.88)70%,rgba(5,3,15,0.98)100%)]" />
+          <div className="absolute -top-48 -left-40 h-[70vh] w-[70vw] bg-[radial-gradient(circle_at_20%_0%,rgba(108,99,255,0.32),transparent_70%)] blur-[160px]" />
+          <div className="absolute top-[35%] -right-52 h-[60vh] w-[60vw] bg-[radial-gradient(circle_at_80%_30%,rgba(255,111,145,0.25),transparent_68%)] blur-[200px]" />
+          <div className="absolute bottom-[-30%] left-1/3 h-[55vh] w-[55vw] bg-[radial-gradient(circle_at_50%_110%,rgba(20,241,149,0.22),transparent_70%)] blur-[180px]" />
         </div>
         {/* Lay out the hero section with centered content and overflow hidden. */}
-        <div className="relative flex justify-center items-center min-h-screen h-[120vh] overflow-hidden">
+        <div className="relative flex justify-center items-center min-h-screen h-screen overflow-hidden">
           {/* Restore the focused purple-blue hero glow. */}
-          <div className="absolute -top-32 left-1/2 z-0 h-[80vh] w-[70vw] -translate-x-1/2 opacity-80 bg-[radial-gradient(circle_at_50%_-40%,rgba(99,102,241,0.38),transparent_68%)] blur-3xl pointer-events-none" />
+          <div className="absolute -top-28 left-1/2 z-0 h-[75vh] w-[68vw] -translate-x-1/2 opacity-90 bg-[radial-gradient(circle_at_45%_-30%,rgba(108,99,255,0.42),transparent_70%)] blur-[140px] pointer-events-none" />
           {/* Draw a vertical accent beam on the left edge. */}
-          <div className="absolute inset-y-12 left-12 w-px z-10 bg-linear-to-b from-purple-500/40 via-white/40 to-transparent pointer-events-none" />
+          {/* <div className="absolute inset-y-12 left-12 w-px z-10 bg-linear-to-b from-purple-500/40 via-white/40 to-transparent pointer-events-none" /> */}
           {/* Place the proximity-sensitive frame grid overlay. */}
           <div className="absolute inset-0 z-10 pointer-events-auto">
             <ProximityHeroFrames className="h-full w-full" />
@@ -73,7 +73,7 @@ export default function Home() {
                   Enter the Dome
                 </button>
                 {/* List supporting feature tags beneath the button. */}
-                <div className="flex flex-col text-left md:text-right gap-1 uppercase tracking-[0.35em] text-white/50 pointer-events-none">
+                <div className="flex flex-col text-left md:text-right gap-1 uppercase tracking-[0.35em] text-white/55 pointer-events-none">
                   {/* Highlight the spatial audio capability. */}
                   <span className="text-[0.65rem] md:text-xs">Spatial Audio</span>
                   {/* Highlight the volumetric lighting feature. */}
@@ -86,12 +86,13 @@ export default function Home() {
           </div>
         </div>
         {/* Blend the hero and gallery sections with a transitional gradient. */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-b from-transparent via-black/20 to-transparent z-20 pointer-events-none" /> {/* Softened via-black/35 to /20 for subtler transition */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-[linear-gradient(180deg,rgba(5,3,15,0)0%,rgba(12,9,32,0.32)40%,rgba(5,3,15,0)100%)] z-20 pointer-events-none" /> {/* Transition using shared deep-violet tones. */}
         {/* Render the dome gallery beneath the hero content, without overriding background. */}
         <div className="relative overflow-hidden "> {/* Added min-h-screen for consistent section height */}
           <DomeGallery />
         </div>
       </div>
+      <About className="-mt-48 sm:-mt-56 lg:-mt-64" variant="embedded" />
     </main>
   );
 }

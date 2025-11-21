@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
+  { label: "About", href: "/#about" },
   { label: "Work", href: "/#work" },
   { label: "Contact", href: "/#contact" },
 ];
@@ -23,6 +23,7 @@ const mobileMenuVariants = {
 export function Navbar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeHash, setActiveHash] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -35,14 +36,32 @@ export function Navbar() {
     setIsMenuOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    const updateHash = () => setActiveHash(window.location.hash);
+    updateHash();
+    window.addEventListener("hashchange", updateHash);
+    return () => window.removeEventListener("hashchange", updateHash);
+  }, []);
+
+  useEffect(() => {
+    setActiveHash(window.location.hash);
+  }, [pathname]);
+
   const isActive = (href: string) => {
-    if (href === "/about") {
-      return pathname === "/about";
+    if (href.includes("#")) {
+      const [base, hash] = href.split("#");
+      const basePath = base || "/";
+      const targetHash = hash ? `#${hash}` : "";
+      const matchesPath = pathname === basePath;
+      if (basePath === "/" && pathname === "/about" && targetHash === "#about") {
+        return true;
+      }
+      if (!targetHash) {
+        return matchesPath;
+      }
+      return matchesPath && activeHash === targetHash;
     }
-    if (href === "/") {
-      return pathname === "/";
-    }
-    return false;
+    return pathname === href;
   };
 
   return (
@@ -62,7 +81,7 @@ export function Navbar() {
             className="h-10 w-auto transition-transform duration-300 hover:scale-[1.02]"
             priority
           />
-          <span className="hidden text-xs font-semibold uppercase tracking-[0.4em] text-white/70 md:block">Bold Frame Media</span>
+          {/* <span className="hidden text-xs font-semibold uppercase tracking-[0.4em] text-white/70 md:block">Bold Frame Media</span> */}
         </Link>
 
         <button

@@ -820,7 +820,7 @@ export default function DomeGallery({
       <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
       <div
         ref={rootRef}
-        className="sphere-root relative w-full min-h-[80vh]"
+        className="sphere-root relative w-full min-h-[110vh]"
         style={
           {
             '--segments-x': segments,
