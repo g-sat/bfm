@@ -8,7 +8,6 @@ import { HeroText } from "../components/Hero/HeroText";
 import { Navbar } from "../components/Overalls/Navbar";
 // Import the 3D dome gallery showcase.
 import DomeGallery from "@/components/Overalls/DomeGallery";
-import About from "@/components/About/About";
 
 // Define the default export for the landing page.
 export default function Home() {
@@ -92,7 +91,6 @@ export default function Home() {
           <DomeGallery />
         </div>
       </div>
-      <About className="-mt-48 sm:-mt-56 lg:-mt-64" variant="embedded" />
     </main>
   );
 }
