@@ -4,6 +4,7 @@ import { Navbar } from "../components/Overalls/Navbar";
 import DomeGallery from "@/components/Overalls/DomeGallery";
 // Import the encapsulated hero section.
 import { HeroSection } from "@/components/Hero/HeroSection";
+import About from "@/components/About/About";
 
 // Define the default export for the landing page.
 export default function Home() {
@@ -16,11 +17,13 @@ export default function Home() {
       {/* Wrap the hero and gallery within a unified container. */}
       <div className="relative min-h-screen"> {/* Allow hero + gallery to size naturally without excess whitespace */}
         <HeroSection />
+        <About/>
         {/* Render the dome gallery beneath the hero content, without overriding background. */}
         <div className="relative overflow-hidden "> {/* Added min-h-screen for consistent section height */}
           <DomeGallery />
         </div>
       </div>
+      
     </main>
   );
 }
