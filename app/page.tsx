@@ -17,11 +17,12 @@ export default function Home() {
       {/* Wrap the hero and gallery within a unified container. */}
       <div className="relative min-h-screen"> {/* Allow hero + gallery to size naturally without excess whitespace */}
         <HeroSection />
-        <About/>
-        {/* Render the dome gallery beneath the hero content, without overriding background. */}
-        <div className="relative overflow-hidden "> {/* Added min-h-screen for consistent section height */}
-          <DomeGallery />
-        </div>
+        
+      {/* Render the dome gallery beneath the hero content, without overriding background. */}
+      <div className="relative overflow-hidden "> {/* Added min-h-screen for consistent section height */}
+        <DomeGallery />
+      </div>
+      <About />
       </div>
       
     </main>
