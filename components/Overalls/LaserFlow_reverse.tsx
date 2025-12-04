@@ -434,11 +434,20 @@ export const LaserFlow: React.FC<Props> = ({
 
   const hasFadedRef = useRef(false);
   const rectRef = useRef<DOMRect | null>(null);
-  const baseDprRef = useRef<number>(1);
   const currentDprRef = useRef<number>(1);
   const pausedRef = useRef<boolean>(false);
   const inViewRef = useRef<boolean>(true);
   const rafRef = useRef<number>(0);
+
+  const resolveDevicePixelRatio = useCallback(() => {
+    if (typeof dpr === 'number' && dpr > 0) {
+      return dpr;
+    }
+    if (typeof window !== 'undefined' && window.devicePixelRatio) {
+      return window.devicePixelRatio;
+    }
+    return 1;
+  }, [dpr]);
 
   const hexToRGB = (hex: string): { r: number; g: number; b: number } => {
     let c = hex.trim();
@@ -562,6 +571,8 @@ export const LaserFlow: React.FC<Props> = ({
   useEffect(() => {
     const mount = mountRef.current;
     if (!mount) return;
+
+    currentDprRef.current = resolveDevicePixelRatio();
 
     const renderer = createRenderer();
     if (!renderer) {
@@ -702,7 +713,7 @@ export const LaserFlow: React.FC<Props> = ({
       
       if (mount.contains(canvas)) mount.removeChild(canvas);
     };
-  }, [createRenderer, setupScene, mouseSmoothTime]);
+  }, [createRenderer, setupScene, mouseSmoothTime, resolveDevicePixelRatio]);
 
   // ✅ FIXED PROPS UPDATE (TYPE-SAFE)
   useEffect(() => {
@@ -736,6 +747,26 @@ export const LaserFlow: React.FC<Props> = ({
     flowSpeed, verticalSizing, horizontalSizing, fogIntensity, fogScale,
     wispSpeed, wispIntensity, flowStrength, decay, falloffStart, fogFallSpeed, color
   ]);
+
+  useEffect(() => {
+    const nextDpr = resolveDevicePixelRatio();
+    currentDprRef.current = nextDpr;
+
+    const renderer = rendererRef.current;
+    const uniforms = uniformsRef.current;
+    const mount = mountRef.current;
+
+    if (!renderer || !uniforms || !mount) {
+      return;
+    }
+
+    const width = mount.clientWidth || 1;
+    const height = mount.clientHeight || 1;
+
+    renderer.setPixelRatio(nextDpr);
+    renderer.setSize(width, height, false);
+    uniforms.iResolution.value.set(width * nextDpr, height * nextDpr, nextDpr);
+  }, [resolveDevicePixelRatio]);
 
   // Recovery effect (same as before)
   useEffect(() => {
@@ -782,7 +813,7 @@ export const LaserFlow: React.FC<Props> = ({
   if (contextLost && recoveryAttemptRef.current >= maxRecoveryAttempts) {
     return (
       <div className={`w-full h-full relative ${className || ''}`} style={style}>
-        <div className="w-full h-full bg-gradient-to-br from-purple-900 to-blue-900 flex items-center justify-center">
+        <div className="w-full h-full bg-linear-to-br from-purple-900 to-blue-900 flex items-center justify-center">
           <div className="text-white text-center">
             <div className="text-lg mb-2">Graphics temporarily unavailable</div>
             <button 

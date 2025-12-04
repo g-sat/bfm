@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
+import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 
@@ -109,7 +110,7 @@ const tertiaryMedia: ShowcaseItem[] = [
 
 const ShowcaseRow = ({ items, direction = "forward", speed = 42 }: ShowcaseRowProps) => {
   const trackRef = useRef<HTMLDivElement | null>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
   const offsetRef = useRef(0);
   const loopWidthRef = useRef(0);
 
@@ -231,11 +232,12 @@ const ShowcaseRow = ({ items, direction = "forward", speed = 42 }: ShowcaseRowPr
             className="group relative h-[260px] w-[420px] shrink-0 overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_18px_60px_rgba(8,7,23,0.45)] backdrop-blur-xl"
           >
             {item.type === "image" ? (
-              <img
+              <Image
                 src={item.src}
                 alt={item.alt}
-                loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.08]"
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="h-full w-full object-cover transition-transform duration-1200 ease-out group-hover:scale-[1.08]"
               />
             ) : (
               <video

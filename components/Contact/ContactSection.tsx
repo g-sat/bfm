@@ -9,7 +9,7 @@ const ContactSection = () => {
       </div>
 
       <div className="relative flex justify-center px-6 md:px-10 lg:px-12">
-        <div className="w-full max-w-[420px] rounded-[32px] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+        <div className="w-full max-w-[420px] rounded-4xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
           <header className="space-y-2">
             <p className="text-xs uppercase tracking-[0.55em] text-white/45">Contact me</p>
             <h2 className="text-3xl font-semibold tracking-tight text-white">Let&apos;s create resonance</h2>
