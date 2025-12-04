@@ -25,9 +25,15 @@ export default function Home() {
       <div className="relative overflow-hidden "> {/* Added min-h-screen for consistent section height */}
         <DomeGallery />
       </div>
-      <About />
-      <WorksSection />
-      <ContactSection />
+      <section id="about">
+        <About />
+      </section>
+      <section id="work">
+        <WorksSection />
+      </section>
+      <section id="contact">
+        <ContactSection />
+      </section>
       <FooterSection />
       </div>
       

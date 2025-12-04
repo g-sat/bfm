@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { MouseEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -23,7 +24,7 @@ const mobileMenuVariants = {
 export function Navbar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeHash, setActiveHash] = useState("");
+  const [activeTarget, setActiveTarget] = useState<string>(pathname);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -37,15 +38,112 @@ export function Navbar() {
   }, [pathname]);
 
   useEffect(() => {
-    const updateHash = () => setActiveHash(window.location.hash);
-    updateHash();
-    window.addEventListener("hashchange", updateHash);
-    return () => window.removeEventListener("hashchange", updateHash);
-  }, []);
+    if (typeof window === "undefined") {
+      setActiveTarget(pathname);
+      return;
+    }
+
+    const currentHash = window.location.hash;
+    setActiveTarget(currentHash || pathname);
+  }, [pathname]);
 
   useEffect(() => {
-    setActiveHash(window.location.hash);
+    if (typeof window === "undefined") return;
+
+    const handleHashChange = () => {
+      setActiveTarget(window.location.hash || pathname);
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
   }, [pathname]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const sectionEntries = navLinks
+      .map(({ href }) => {
+        const [, hash] = href.split("#");
+        if (!hash) return null;
+        const node = document.getElementById(hash);
+        if (!node) return null;
+        return { id: hash, element: node } as const;
+      })
+      .filter((value): value is { id: string; element: HTMLElement } => Boolean(value));
+
+    if (!sectionEntries.length) return;
+
+    let rafId: number | null = null;
+
+    const evaluateActiveSection = () => {
+      rafId = null;
+
+      const scrollTop = window.scrollY;
+      if (scrollTop < 120) {
+        setActiveTarget((prev) => (prev === "/" ? prev : "/"));
+        return;
+      }
+
+      const viewportCenter = scrollTop + window.innerHeight / 2;
+
+      let closestId: string | null = null;
+      let minDistance = Number.POSITIVE_INFINITY;
+
+      sectionEntries.forEach(({ id, element }) => {
+        const rect = element.getBoundingClientRect();
+        const sectionCenter = rect.top + scrollTop + rect.height / 2;
+        const distance = Math.abs(sectionCenter - viewportCenter);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestId = id;
+        }
+      });
+
+      if (closestId) {
+        const nextTarget = `#${closestId}`;
+        setActiveTarget((prev) => (prev === nextTarget ? prev : nextTarget));
+      }
+    };
+
+    const scheduleEvaluation = () => {
+      if (rafId !== null) return;
+      rafId = window.requestAnimationFrame(evaluateActiveSection);
+    };
+
+    window.addEventListener("scroll", scheduleEvaluation, { passive: true });
+    window.addEventListener("resize", scheduleEvaluation);
+
+    evaluateActiveSection();
+
+    return () => {
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+      window.removeEventListener("scroll", scheduleEvaluation);
+      window.removeEventListener("resize", scheduleEvaluation);
+    };
+  }, [pathname]);
+
+  const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.includes("#")) {
+      event.preventDefault();
+    }
+
+    const [base, hash] = href.split("#");
+    if (hash) {
+      setActiveTarget(`#${hash}`);
+      const target = document.getElementById(hash);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        window.location.hash = hash.startsWith("#") ? hash : `#${hash}`;
+      }
+    } else {
+      setActiveTarget(base || "/");
+    }
+    setIsMenuOpen(false);
+  };
 
   const isActive = (href: string) => {
     if (href.includes("#")) {
@@ -53,15 +151,12 @@ export function Navbar() {
       const basePath = base || "/";
       const targetHash = hash ? `#${hash}` : "";
       const matchesPath = pathname === basePath;
-      if (basePath === "/" && pathname === "/about" && targetHash === "#about") {
-        return true;
-      }
       if (!targetHash) {
-        return matchesPath;
+        return matchesPath && activeTarget === basePath;
       }
-      return matchesPath && activeHash === targetHash;
+      return matchesPath && activeTarget === targetHash;
     }
-    return pathname === href;
+    return activeTarget === href;
   };
 
   return (
@@ -99,7 +194,11 @@ export function Navbar() {
               const active = isActive(href);
               return (
                 <li key={label}>
-                  <Link href={href} className="relative block overflow-hidden rounded-full px-5 py-2">
+                  <Link
+                    href={href}
+                    className="relative block overflow-hidden rounded-full px-5 py-2"
+                    onClick={(event) => handleNavClick(event, href)}
+                  >
                     {active && (
                       <motion.span
                         layoutId="nav-active"
@@ -138,7 +237,7 @@ export function Navbar() {
                     <Link
                       href={href}
                       className="flex items-center justify-between uppercase tracking-[0.3em]"
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={(event) => handleNavClick(event, href)}
                     >
                       <span>{label}</span>
                       <span className="text-xs text-white/40">→</span>
