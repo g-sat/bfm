@@ -18,95 +18,192 @@ type ShowcaseRowProps = {
   speed?: number;
 };
 
-const primaryMedia: ShowcaseItem[] = [
+const buildMediaSet = (items: ShowcaseItem[], total: number): ShowcaseItem[] =>
+  Array.from({ length: total }, (_, index) => {
+    const base = items[index % items.length];
+    const altSuffix = ` ${index + 1}`;
+
+    if (base.type === "image") {
+      return {
+        ...base,
+        alt: `${base.alt}${altSuffix}`,
+      } satisfies ShowcaseItem;
+    }
+
+    const videoItem: ShowcaseItem = {
+      ...base,
+      alt: `${base.alt}${altSuffix}`,
+    };
+
+    videoItem.poster = base.poster;
+
+    return videoItem;
+  });
+
+const unsplashImage = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1600&q=80`;
+
+const primaryBase: ShowcaseItem[] = [
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Mt_Baker.mp4",
-    poster: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+    poster: unsplashImage("photo-1498050108023-c5249f4df085"),
     alt: "Immersive mountain projection",
   },
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1200&q=80",
-    alt: "Volumetric light installation",
+    src: unsplashImage("photo-1526481280695-3c469bca60a5"),
+    alt: "Chromatic fog tunnel",
   },
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1518895949257-7621c3c786d4?auto=format&fit=crop&w=1200&q=80",
+    src: unsplashImage("photo-1518895949257-7621c3c786d4"),
     alt: "Interactive dome experience",
   },
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Footboys.mp4",
-    poster: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80",
+    poster: unsplashImage("photo-1514525253161-7a46d19cd819"),
     alt: "Spatial audio runway",
   },
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1526481280695-3c469bca60a5?auto=format&fit=crop&w=1200&q=80",
-    alt: "Chromatic fog tunnel",
+    src: unsplashImage("photo-1498050108023-c5249f4df085"),
+    alt: "Volumetric light installation",
   },
-];
-
-const secondaryMedia: ShowcaseItem[] = [
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1530023367847-a683933f4177?auto=format&fit=crop&w=1200&q=80",
-    alt: "360 capture stage",
+    src: unsplashImage("photo-1500530855697-b586d89ba3ee"),
+    alt: "Sensorial halo stage",
   },
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Santorini.mp4",
-    poster: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+    poster: unsplashImage("photo-1469474968028-56623f02e42e"),
     alt: "Immersive holographic archive",
   },
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80",
-    alt: "Light sculpture desert bloom",
-  },
-  {
-    type: "image",
-    src: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=1200&q=80",
-    alt: "Mobile studio interior",
+    src: unsplashImage("photo-1531297484001-80022131f5a1"),
+    alt: "Aurora volumetric bloom",
   },
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Sunder.mp4",
-    poster: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
-    alt: "Sensorial launch environment",
+    poster: unsplashImage("photo-1526378722484-cc5c7100c02d"),
+    alt: "Pulse arena walkthrough",
+  },
+  {
+    type: "image",
+    src: unsplashImage("photo-1478720568477-152d0b37d9d0"),
+    alt: "Immersion field canopy",
   },
 ];
 
-const tertiaryMedia: ShowcaseItem[] = [
+const secondaryBase: ShowcaseItem[] = [
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1482192597420-4817fdd7e8b0?auto=format&fit=crop&w=1200&q=80",
-    alt: "Geodesic arena exterior",
+    src: unsplashImage("photo-1530023367847-a683933f4177"),
+    alt: "360 capture stage",
+  },
+  {
+    type: "image",
+    src: unsplashImage("photo-1489515217757-5fd1be406fef"),
+    alt: "Light sculpture desert bloom",
   },
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Nature-Love.mp4",
-    poster: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80",
+    poster: unsplashImage("photo-1482192597420-4817fdd7e8b0"),
     alt: "Vapor tunnel sequence",
   },
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80",
-    alt: "Adaptive stage lighting",
+    src: unsplashImage("photo-1563089145-599997674d42"),
+    alt: "Mobile studio interior",
   },
   {
     type: "image",
-    src: "https://images.unsplash.com/photo-1573166331073-5dff3304065c?auto=format&fit=crop&w=1200&q=80",
-    alt: "Immersion capsule",
+    src: unsplashImage("photo-1504384308090-c894fdcc538d"),
+    alt: "Immersive capsule bay",
   },
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Palm_Trees.mp4",
-    poster: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
-    alt: "Live data visuals",
+    poster: unsplashImage("photo-1518770660439-4636190af475"),
+    alt: "Ambient data canopy",
+  },
+  {
+    type: "image",
+    src: unsplashImage("photo-1521737604893-d14cc237f11d"),
+    alt: "Immersive projection atrium",
+  },
+  {
+    type: "video",
+    src: "https://storage.googleapis.com/coverr-main/mp4/Footboys.mp4",
+    poster: unsplashImage("photo-1520052205864-92d242b3a76b"),
+    alt: "Kinetic tunnel drift",
+  },
+  {
+    type: "image",
+    src: unsplashImage("photo-1481277542470-605612bd2d61"),
+    alt: "Neon archive vault",
   },
 ];
+
+const tertiaryBase: ShowcaseItem[] = [
+  {
+    type: "image",
+    src: unsplashImage("photo-1514525253161-7a46d19cd819"),
+    alt: "Adaptive stage lighting",
+  },
+  {
+    type: "video",
+    src: "https://storage.googleapis.com/coverr-main/mp4/Santorini.mp4",
+    poster: unsplashImage("photo-1526045478516-99145907023c"),
+    alt: "Orbiting waveform scene",
+  },
+  {
+    type: "image",
+    src: unsplashImage("photo-1573166331073-5dff3304065c"),
+    alt: "Immersion capsule",
+  },
+  {
+    type: "image",
+    src: unsplashImage("photo-1516927846708-3f5926c05c1b"),
+    alt: "Geodesic arena exterior",
+  },
+  {
+    type: "video",
+    src: "https://storage.googleapis.com/coverr-main/mp4/Sunder.mp4",
+    poster: unsplashImage("photo-1515169067865-5387ec356754"),
+    alt: "Spectral fountain drift",
+  },
+  {
+    type: "image",
+    src: unsplashImage("photo-1526378722484-cc5c7100c02d"),
+    alt: "Flux canopy walkway",
+  },
+  {
+    type: "image",
+    src: unsplashImage("photo-1469334031218-e382a71b716b"),
+    alt: "Data bloom columns",
+  },
+  {
+    type: "video",
+    src: "https://storage.googleapis.com/coverr-main/mp4/Nature-Love.mp4",
+    poster: unsplashImage("photo-1470229722913-7c0e2dbbafd3"),
+    alt: "Subliminal tide gallery",
+  },
+  {
+    type: "image",
+    src: unsplashImage("photo-1471577490405-79a4b2448300"),
+    alt: "Sonar horizon chamber",
+  },
+];
+
+const primaryMedia = buildMediaSet(primaryBase, 30);
+const secondaryMedia = buildMediaSet(secondaryBase, 30);
+const tertiaryMedia = buildMediaSet(tertiaryBase, 30);
 
 const ShowcaseRow = ({ items, direction = "forward", speed = 42 }: ShowcaseRowProps) => {
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -266,6 +363,13 @@ const WorksSection = () => {
         <div className="absolute inset-x-0 top-0 h-1/2 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.2),transparent)]" />
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[radial-gradient(circle_at_bottom,rgba(239,68,68,0.18),transparent)]" />
         <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(12,12,24,0.9),rgba(5,5,12,0.95))]" />
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_0%,rgba(255,255,255,0)_72%)] opacity-60" />
+          <div className="absolute inset-0 mask-[radial-gradient(circle_at_center,rgba(0,0,0,1)_0%,rgba(0,0,0,0.8)_65%,transparent_90%)]">
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.16)_1px,transparent_1px)] bg-size-[90px_90px] opacity-[0.12]" />
+            <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(255,255,255,0.16)_1px,transparent_1px)] bg-size-[90px_90px] opacity-[0.12]" />
+          </div>
+        </div>
       </div>
 
       <div className="relative mx-auto flex w-[80vw] max-w-[1400px] flex-col gap-14 px-6 md:px-10 lg:px-12">
@@ -282,9 +386,9 @@ const WorksSection = () => {
         </header>
 
         <div className="space-y-8">
-          <ShowcaseRow items={primaryMedia} speed={46} />
-          <ShowcaseRow items={secondaryMedia} direction="reverse" speed={38} />
-          <ShowcaseRow items={tertiaryMedia} speed={42} />
+          <ShowcaseRow items={primaryMedia} speed={50} />
+          <ShowcaseRow items={secondaryMedia} speed={38} />
+          <ShowcaseRow items={tertiaryMedia} speed={25} />
         </div>
       </div>
 
