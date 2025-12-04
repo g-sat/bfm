@@ -40,61 +40,61 @@ const buildMediaSet = (items: ShowcaseItem[], total: number): ShowcaseItem[] =>
     return videoItem;
   });
 
-const unsplashImage = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1600&q=80`;
+const unsplashImage = (id: string) => `/assets/images/${id}.jpg`;
 
 const primaryBase: ShowcaseItem[] = [
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Mt_Baker.mp4",
-    poster: unsplashImage("photo-1498050108023-c5249f4df085"),
+    poster: unsplashImage("1"),
     alt: "Immersive mountain projection",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1526481280695-3c469bca60a5"),
+    src: unsplashImage("2"),
     alt: "Chromatic fog tunnel",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1518895949257-7621c3c786d4"),
+    src: unsplashImage("3"),
     alt: "Interactive dome experience",
   },
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Footboys.mp4",
-    poster: unsplashImage("photo-1514525253161-7a46d19cd819"),
+    poster: unsplashImage("4"),
     alt: "Spatial audio runway",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1498050108023-c5249f4df085"),
+    src: unsplashImage("5"),
     alt: "Volumetric light installation",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1500530855697-b586d89ba3ee"),
+    src: unsplashImage("6"),
     alt: "Sensorial halo stage",
   },
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Santorini.mp4",
-    poster: unsplashImage("photo-1469474968028-56623f02e42e"),
+    poster: unsplashImage("7"),
     alt: "Immersive holographic archive",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1531297484001-80022131f5a1"),
+    src: unsplashImage("8"),
     alt: "Aurora volumetric bloom",
   },
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Sunder.mp4",
-    poster: unsplashImage("photo-1526378722484-cc5c7100c02d"),
+    poster: unsplashImage("9"),
     alt: "Pulse arena walkthrough",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1478720568477-152d0b37d9d0"),
+    src: unsplashImage("10"),
     alt: "Immersion field canopy",
   },
 ];
@@ -102,50 +102,50 @@ const primaryBase: ShowcaseItem[] = [
 const secondaryBase: ShowcaseItem[] = [
   {
     type: "image",
-    src: unsplashImage("photo-1530023367847-a683933f4177"),
+    src: unsplashImage("11"),
     alt: "360 capture stage",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1489515217757-5fd1be406fef"),
+    src: unsplashImage("12"),
     alt: "Light sculpture desert bloom",
   },
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Nature-Love.mp4",
-    poster: unsplashImage("photo-1482192597420-4817fdd7e8b0"),
+    poster: unsplashImage("13"),
     alt: "Vapor tunnel sequence",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1563089145-599997674d42"),
+    src: unsplashImage("14"),
     alt: "Mobile studio interior",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1504384308090-c894fdcc538d"),
+    src: unsplashImage("15"),
     alt: "Immersive capsule bay",
   },
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Palm_Trees.mp4",
-    poster: unsplashImage("photo-1518770660439-4636190af475"),
+    poster: unsplashImage("16"),
     alt: "Ambient data canopy",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1521737604893-d14cc237f11d"),
+    src: unsplashImage("17"),
     alt: "Immersive projection atrium",
   },
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Footboys.mp4",
-    poster: unsplashImage("photo-1520052205864-92d242b3a76b"),
+    poster: unsplashImage("18"),
     alt: "Kinetic tunnel drift",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1481277542470-605612bd2d61"),
+    src: unsplashImage("19"),
     alt: "Neon archive vault",
   },
 ];
@@ -153,50 +153,50 @@ const secondaryBase: ShowcaseItem[] = [
 const tertiaryBase: ShowcaseItem[] = [
   {
     type: "image",
-    src: unsplashImage("photo-1514525253161-7a46d19cd819"),
+    src: unsplashImage("20"),
     alt: "Adaptive stage lighting",
   },
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Santorini.mp4",
-    poster: unsplashImage("photo-1526045478516-99145907023c"),
+    poster: unsplashImage("21"),
     alt: "Orbiting waveform scene",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1573166331073-5dff3304065c"),
+    src: unsplashImage("22"),
     alt: "Immersion capsule",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1516927846708-3f5926c05c1b"),
+    src: unsplashImage("23"),
     alt: "Geodesic arena exterior",
   },
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Sunder.mp4",
-    poster: unsplashImage("photo-1515169067865-5387ec356754"),
+    poster: unsplashImage("11"),
     alt: "Spectral fountain drift",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1526378722484-cc5c7100c02d"),
+    src: unsplashImage("3"),
     alt: "Flux canopy walkway",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1469334031218-e382a71b716b"),
+    src: unsplashImage("17"),
     alt: "Data bloom columns",
   },
   {
     type: "video",
     src: "https://storage.googleapis.com/coverr-main/mp4/Nature-Love.mp4",
-    poster: unsplashImage("photo-1470229722913-7c0e2dbbafd3"),
+    poster: unsplashImage("13"),
     alt: "Subliminal tide gallery",
   },
   {
     type: "image",
-    src: unsplashImage("photo-1471577490405-79a4b2448300"),
+    src: unsplashImage("15"),
     alt: "Sonar horizon chamber",
   },
 ];
