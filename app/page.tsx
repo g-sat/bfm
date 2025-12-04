@@ -5,6 +5,9 @@ import DomeGallery from "@/components/Overalls/DomeGallery";
 // Import the encapsulated hero section.
 import { HeroSection } from "@/components/Hero/HeroSection";
 import About from "@/components/About/About";
+import WorksSection from "@/components/Works/WorksSection";
+import ContactSection from "@/components/Contact/ContactSection";
+import FooterSection from "@/components/Footer/FooterSection";
 
 // Define the default export for the landing page.
 export default function Home() {
@@ -23,6 +26,9 @@ export default function Home() {
         <DomeGallery />
       </div>
       <About />
+      <WorksSection />
+      <ContactSection />
+      <FooterSection />
       </div>
       
     </main>

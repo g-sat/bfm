@@ -19,6 +19,7 @@ import {
   LineSegments,
   PointLight,
   PCFSoftShadowMap,
+  Color,
 } from 'three';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -56,17 +57,20 @@ const Tube: React.FC<TubeProps> = ({ sectionRef }) => {
     const markers: THREE.Vector3[] = [];
     const ww = window.innerWidth;
     const wh = window.innerHeight;
+    const canvasElement = canvasRef.current;
     const renderer = new THREE.WebGLRenderer({
-      canvas: canvasRef.current,
+      canvas: canvasElement,
       antialias: true,
     });
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = PCFSoftShadowMap;
     renderer.setSize(ww, wh);
+    renderer.setClearColor(0x050103, 1);
     const composer: EffectComposer = new EffectComposer(renderer);
     renderer.setSize(ww, wh);
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0x194794, 0, 100);
+    scene.fog = new THREE.Fog(0x170207, 0, 95);
+    scene.background = new Color(0x050103);
     //const clock = new THREE.Clock();
     let cameraRotationProxyX = 3.14159;
     let cameraRotationProxyY = 0;
@@ -114,11 +118,6 @@ const Tube: React.FC<TubeProps> = ({ sectionRef }) => {
     const path = new CatmullRomCurve3(points);
     path.tension = 0.5;
     const geometry = new TubeGeometry(path, 300, 4, 32, false);
-    const texture = new TextureLoader().load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/68819/3d_space_5.jpg', function (texture: THREE.Texture) {
-      texture.wrapS = texture.wrapT = RepeatWrapping;
-      texture.offset.set(0, 0);
-      texture.repeat.set(15, 2);
-    });
     const mapHeight = new TextureLoader().load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/68819/waveform-bump3.jpg', function (texture: THREE.Texture) {
       texture.wrapS = texture.wrapT = RepeatWrapping;
       texture.offset.set(0, 0);
@@ -126,11 +125,13 @@ const Tube: React.FC<TubeProps> = ({ sectionRef }) => {
     });
     const material = new MeshPhongMaterial({
       side: BackSide,
-      map: texture,
-      shininess: 20,
+      color: 0x6f0014,
+      emissive: 0x230006,
+      emissiveIntensity: 0.45,
+      shininess: 40,
       bumpMap: mapHeight,
       bumpScale: -0.03,
-      specular: 0x0b2349,
+      specular: 0xff375f,
     });
     const tube = new THREE.Mesh(geometry, material);
     scene.add(tube);
@@ -138,12 +139,13 @@ const Tube: React.FC<TubeProps> = ({ sectionRef }) => {
     const geo = new EdgesGeometry(geometryInner);
     const mat = new LineBasicMaterial({
       linewidth: 2,
-      opacity: 0.2,
+      opacity: 0.45,
       transparent: true,
+      color: 0xff304c,
     });
     const wireframe = new LineSegments(geo, mat);
     scene.add(wireframe);
-    const light = new PointLight(0xffffff, 0.35, 4, 0);
+    const light = new PointLight(0xff5a71, 0.45, 4, 0);
     light.castShadow = true;
     scene.add(light);
 
@@ -187,7 +189,7 @@ const Tube: React.FC<TubeProps> = ({ sectionRef }) => {
       particles2 = new THREE.BufferGeometry(),
       particles3 = new THREE.BufferGeometry(),
       pMaterial = new THREE.PointsMaterial({
-        color: 0xFFFFFF,
+        color: 0xff6b8d,
         size: 0.5,
         map: spikeyTexture,
         transparent: true,
@@ -255,7 +257,7 @@ const Tube: React.FC<TubeProps> = ({ sectionRef }) => {
       if (p1) markers.push(p1);
       console.log(JSON.stringify(markers));
     };
-    canvasRef.current.addEventListener('click', handleCanvasClick);
+    canvasElement?.addEventListener('click', handleCanvasClick);
 
     const handleResize = () => {
       const width = window.innerWidth;
@@ -278,7 +280,7 @@ const Tube: React.FC<TubeProps> = ({ sectionRef }) => {
     return () => {
       tl.scrollTrigger?.kill();
       tl.kill();
-      canvasRef.current?.removeEventListener('click', handleCanvasClick);
+      canvasElement?.removeEventListener('click', handleCanvasClick);
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('mousemove', handleMouseMove);
       scene.clear();
