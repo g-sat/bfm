@@ -1,0 +1,75 @@
+Hook inventory for Bold Frame Media (ordered roughly by the sequence visitors encounter components on `app/page.tsx`).
+
+Navbar (`components/Overalls/Navbar.tsx`)
+- `useState` keeps `isScrolled`, `activeTarget`, `isMenuOpen` so the chrome can switch opacity, highlight the section currently in view, and collapse the mobile drawer without rerendering unrelated regions.
+- `useEffect` (five separate blocks) wires scroll listeners for the sticky glass effect, closes the menu whenever the route changes, initializes the active hash on load, syncs hash updates triggered by smooth scrolling, and runs an IntersectionObserver-style calculation (via manual measurement plus `requestAnimationFrame`) to update `activeTarget` while the user scrolls. Each cleanup removes listeners to avoid memory leaks.
+- `usePathname` from Next.js seeds the nav with the current route so server navigation and hash jumps stay aligned.
+
+Audio player (`components/Overalls/Audio.tsx`)
+- `useRef` stores the `<audio>` element plus the floating panel container, letting imperative code pause, play, and detect outside clicks without forcing React state updates.
+- `useState` tracks mute status, current volume, previous volume (for restoring levels), playback state, and panel visibility. Those state slices drive button LEDs and slider bindings so visitors always see truthful audio feedback.
+- Four `useEffect` hooks: one attaches native audio event listeners, one handles autoplay with user-interaction fallbacks, one mirrors the React volume/mute snapshot back into the DOM element, and one closes the settings popover when the user clicks away. Together they make the audio control reliable despite browser autoplay policies.
+
+CircularText (`components/Overalls/CircularText.tsx`)
+- `useEffect` kicks off the framer-motion animation loop whenever `spinDuration` changes, ensuring the letters keep spinning after prop updates.
+- `useAnimation` (framer hook) supplies imperative control over the motion timeline so hover states can be accelerated, paused, or made “bonkers”.
+- `useMotionValue` stores the live rotation angle, which the hover handlers sample to calculate seamless restarts.
+
+Hero3D (`components/Hero/Hero3D.tsx`)
+- `useRef` references the Three.js group so pointer math can lerp the exact mesh.
+- `useEffect` does two jobs: it repeatedly applies the baseline tilt until the GLTF loads, then it attaches a window-level mousemove listener that updates the group rotation with MathUtils.lerp for buttery tilt without re-rendering React nodes.
+
+HeroText (`components/Hero/HeroText.tsx`)
+- `useRef` points at the `<h1>` for direct DOM manipulation plus at the CTA anchor for button physics.
+- Two `useEffect` hooks: the first converts the heading copy into span-wrapped glyphs then feeds them into a GSAP timeline, giving Bold Frame its cinematic type entrance. The second tracks cursor movement over the CTA, storing coordinates in `useState` to drive the gradient blob animation.
+- `useState` keeps the per-frame mouse position and a boolean `isHovering`, enabling smooth interpolation without expensive DOM reads inside render.
+
+ProximityHeroFrames (`components/Hero/ProximityHeroFrames.tsx`)
+- `useState` stores a Map of active tiles with local cursor coordinates, which makes the proximity mask highly responsive.
+- Extensive `useRef` usage caches DOM nodes, timeout handles, neighbor graphs, previous batches, and wave timers so the animation logic can mutate them without scheduling React renders.
+- `useMemo` builds the 36-frame layout once, preventing expensive array recreation.
+- Multiple `useEffect` blocks: one computes adjacency relationships, one attaches mousemove listeners to compute proximity per tile, one spins up the autonomous “wave” animations, and one pauses or resumes waves when the pointer enters/leaves. Cleanups wipe timers to avert leaks.
+- `useCallback` memoizes `startWave`, which allows the dependency arrays in those effects to stay minimal while still restarting waves on prop changes.
+
+Hero laser shaders (`components/Hero/LaserFlow.tsx`)
+- Dozens of `useRef` hooks hold WebGL renderer references, shader uniforms, DPR samples, FPS history, pointer state, and IntersectionObserver toggles. This keeps the animation loop entirely out of React’s reconciliation path.
+- `useEffect` bootstraps the Three.js scene, installs ResizeObserver plus IntersectionObserver instances, tracks device-pixel adjustments, wires WebGL context recovery handlers, and tears everything down on unmount so GPU memory stays healthy.
+
+DomeGallery (`components/Overalls/DomeGallery.tsx`)
+- A large set of `useRef` values keep DOM nodes, scroll locks, drag state, rotation snapshots, tap metadata, and inertia RAF IDs. These refs let pointer gestures mutate state without triggering React renders.
+- `useMemo` builds the tile grid exactly once per `images`/`segments` change and caches computed props for performance.
+- Multiple `useCallback` utilities (`lockScroll`, `unlockScroll`, `stopInertia`, `startInertia`, `openItemFromElement`) give gesture handlers stable identities and prevent redundant re-renders.
+- Several `useEffect` hooks: one wires ResizeObserver + CSS variable updates, another couples `use-gesture` drag events to rotation state, others handle overlay lifecycle, keyboard escape handling, and scroll locking. Together they deliver native-feeling drag plus cinematic enlargements without layout thrash.
+
+Circular overlays + backgrounds (`components/Hero/LaserFlow.tsx` and `components/Overalls/LaserFlow_reverse.tsx`)
+- Both files rely on expansive `useRef` collections for WebGL constructs, `useState` flags for context loss or recovery phases, and `useEffect` lifecycles that set up renderers, attach observers, responsively adjust DPR, and clean everything. `useCallback` is used for renderer factories, shader setup, and recovery pipelines, providing stable references for event listeners. These hooks keep the volumetric shader scenes performant while recovering gracefully from context loss.
+
+WorksSection (`components/Works/WorksSection.tsx`)
+- `useRef` maintains the track node, RAF handle, translation offset, and measured loop width so the marquee can move entirely outside React renders.
+- `useMemo` doubles the media list only when `items` changes, keeping DOM reconciliation cheap.
+- Three `useEffect` hooks manage the animation loop, reset offsets when props change, and remeasure widths after images/videos finish loading. The result is a conveyor that never jitters even if assets decode late.
+
+Audio-reactive overlays (`components/Overalls/CircularText.tsx`) already covered above, still relevant for the hero perimeter copy.
+
+About section (`components/About/About.tsx`)
+- `useRef` arrays track hero line elements plus the alternate overlay stacks, giving GSAP direct handles for its staggered timelines.
+- A single `useEffect` scopes GSAP contexts, sets initial opacity for overlay stacks, defines the intro timeline, and wires ScrollTrigger sequences that swap the four motto sets as the viewer scrolls. Cleanup calls `ctx.revert()` to remove inline transforms, which is crucial for App Router fast refreshes.
+
+Tube background (`components/About/Tube.tsx`)
+- `useRef` keeps the `<canvas>` node handy for Three.js.
+- `useEffect` initializes the tunnel scene, hooks ScrollTrigger to advance the camera through the Catmull-Rom curve, attaches mousemove listeners for slight rotation shifts, handles resize/visibility events, and disposes of all WebGL objects to prevent GPU leaks when the section unmounts.
+
+Dome gallery audio HUD (already described) plus `components/Overalls/Audio.tsx` complement each other so the landing page always has ambient sound without blocking scroll.
+
+Site-wide loaders (commented `app/loading.tsx` and `app/LoadingPage.tsx`) import `useEffect`/`useRef` but leave them commented out, indicating future work while having zero runtime impact today.
+
+Summary table (hook → key components → benefit)
+- `useState`: Navbar, AudioPlayer, HeroText, ProximityHeroFrames, LaserFlow_reverse — tracks UI toggles and shader recovery flags to keep feedback instantaneous without prop drilling.
+- `useEffect`: nearly every interactive component — encapsulates lifecycle work such as attaching listeners, spawning GSAP timelines, booting WebGL scenes, and syncing DOM APIs with React state. Cleanups maintain performance on route transitions.
+- `useRef`: pervasive in Hero3D, DomeGallery, WebGL shaders, WorksSection — stores mutable objects that need to outlive renders (DOM nodes, RAF IDs, shader uniforms), which keeps React renders pure while enabling imperative animation loops.
+- `useMemo`: WorksSection, DomeGallery, ProximityHeroFrames — memoizes heavy arrays so re-renders stay cheap even when props change.
+- `useCallback`: DomeGallery, ProximityHeroFrames, LaserFlow_reverse — provides stable references for gesture handlers and renderer factories, eliminating redundant effect re-subscriptions.
+- Next’s `usePathname`: Navbar only — keeps hashes synced with router state so the sticky bar always reflects the current section.
+- Framer’s `useAnimation`/`useMotionValue`: CircularText — supplies precise timeline control for the spinning copy ring.
+
+Collectively, these hooks make the site feel alive without sacrificing stability: listeners attach exactly once, GPU scenes tear down properly, scrolling sections highlight in sync, and interactive art pieces respond instantly to pointer motion. The inventory above can serve as a checklist during future refactors to ensure lifecycle-sensitive hooks remain intact.

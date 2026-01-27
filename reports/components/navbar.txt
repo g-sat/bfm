@@ -1,0 +1,33 @@
+Navbar crowns Bold Frame Media's layout as the fixed control surface linking hero, gallery, narrative modules, contact hub, plus footer. The file begins with 'use client', signaling reliance on hooks, viewport APIs, plus Framer Motion primitives. Imports bring Image, Link, usePathname, AnimatePresence, motion, cubicBezier, plus the shared cn helper. Upfront arrays define navLinks plus mobileMenuVariants, giving designers a centralized spot to revise labeling while preserving animation curves expressed through the cubic Bézier helpers.
+
+Key state variables appear right after navLinks. const pathname = usePathname(); captures the current App Router segment. isScrolled, activeTarget, plus isMenuOpen track visual conditions. activeTarget seeds with pathname to mirror whichever section loads initially. isScrolled toggles when the viewport travels beyond twenty-four pixels, enabling the frosted border highlight. isMenuOpen supplies the mobile overlay toggle, giving parity between desktop list plus compact drawer.
+
+A dedicated useEffect attaches handleScroll that checks window.scrollY > 24. The cleanup removes the listener to prevent leaks. This micro-loop drives the dynamic class swap inside the wrapper <div className={cn(...)}> where the first branch sets bg-[#090614]/90 plus drop shadow when isScrolled equals true. Without this guard the nav would remain translucent even after page motion, reducing readability over bright hero gradients.
+
+Hash synchronization arrives via another useEffect. During hydration the hook inspects window.location.hash. If a hash exists, setActiveTarget stores that anchor; otherwise it reuses pathname. A further effect monitors hashchange events, ensuring manual anchor edits update activeTarget. These watchers empower deep-linked visits hitting /#work versus /#contact while maintaining consistent highlight behavior on both initial render plus later navigations.
+
+The heaviest logic chunk builds an array named sectionEntries. That pipeline maps each href inside navLinks, splits on #, then queries document.getElementById. Nulls get filtered out, yielding an array of { id, element }. A requestAnimationFrame-driven loop named evaluateActiveSection computes the scroll midpoint: const viewportCenter = scrollTop + window.innerHeight / 2;. Each section's bounding rectangle sets a center value, the algorithm finds whichever distance stays smallest, then updates activeTarget with that hash.
+
+To avoid thrashing, the code schedules evaluation through scheduleEvaluation, which guards against redundant RAF calls. window.addEventListener("scroll", scheduleEvaluation, { passive: true }) plus a resize listener keep the highlight in sync even during viewport changes. Cleanup cancels pending RAF handles plus removes listeners. This disciplined arrangement supplies buttery indicator transitions no matter how quickly visitors flick through the stack.
+
+The handleNavClick helper intercepts anchor taps. When href contains a hash, the handler prevents default navigation, extracts the base path plus target fragment, updates activeTarget, then calls target.scrollIntoView({ behavior: "smooth", block: "start" }); if the element exists. Missing nodes trigger a fallback assignment to window.location.hash, keeping the URL shareable. Plain path links simply set activeTarget to the base string. Each click collapses the menu by toggling setIsMenuOpen(false).
+
+isActive compares the current pathname with each candidate. For hash links the helper ensures the base path matches before comparing the stored hash string. That boolean drives two visuals: text color plus the animated pill. Inside the JSX the snippet appears as:
+
+```
+{active && (
+  <motion.span
+    layoutId="nav-active"
+    className="absolute inset-0 rounded-full border border-white/15 bg-white/10"
+    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+  />
+)}
+```
+
+Shared layoutId gives Framer Motion enough context to morph the highlight between list items without jitter.
+
+The returned JSX begins with <nav className="fixed inset-x-0 top-4 z-40 flex justify-center px-4">. Inside, a rounded container houses three primary zones. Left: a Link wrapping the logotype image. Center-right: desktop link row plus CTA button, hidden on small screens via sm:flex. For narrow devices a circular button toggles isMenuOpen. This button includes accessible labeling plus a simple span representing the hamburger stroke.
+
+When isMenuOpen equals true, AnimatePresence spawns a motion.div overlay with border radius, glassmorphism background, plus mobileMenuVariants for entrance versus exit easing. The overlay replicates the navLinks list using uppercase tracking, plus reiterates the CTA as a full-width pill. Each list row features a chevron arrow to reinforce affordance. Because AnimatePresence handles unmount timing, transitions stay smooth even when visitors hammer the toggle.
+
+Navbar accepts zero props, yet its internal state plus hooks create a responsive guidance system. Designers can extend navLinks without touching the scroll logic because the observer builds entries dynamically. Animation curves live inside shared constants, inviting experimentation without rewriting logic. This component epitomizes Bold Frame Media's methodology: richly styled surfaces fused with measurable interaction rigor, all while staying rooted in a single, well-structured file.

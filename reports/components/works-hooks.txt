@@ -1,0 +1,13 @@
+Hooks inside `components/Works/WorksSection.tsx` keep the marquee silky while protecting render budgets.
+
+`useRef` appears multiple times: `trackRef` stores the scroller node, `animationRef` captures the current `requestAnimationFrame` handle, `offsetRef` retains the pixel translation, `loopWidthRef` caches the measured loop length. Because refs maintain identity without forcing re-renders, the component updates motion data every frame without touching React state. This separation prevents jitter plus keeps CPU usage minimal.
+
+`useMemo` duplicates the incoming `items` array only when props change. `[...items, ...items]` supplies an endless conveyor while guarding against unnecessary recomputation. With memoization in place, React diffing sees stable references, meaning DOM children never shuffle mid-flight, which preserves GPU-friendly transforms.
+
+The first `useEffect` bootstraps animation. Inside, a ResizeObserver tracks width shifts, timestamps calculate delta time, offsets update, wraparound logic fires, plus `requestAnimationFrame` schedules the next tick. Running that logic within an effect ensures the loop starts exactly once per mount. Cleanup cancels the RAF plus disconnects the observer, safeguarding memory during route transitions. Visitors experience seamless drifting rows that never stutter, even when alt-tabbed or resizing windows.
+
+A second `useEffect` listens for changes in `items`. Whenever marketing swaps imagery or responsive logic injects new media, this effect zeros offsets, resets transforms, plus recalculates widths. Without this guard, the carousel would jump mid-drift, undermining polish. Automatic resets keep momentum feeling intentional regardless of data churn.
+
+A third `useEffect` attaches `load` and `loadeddata` listeners to every `<img>` plus `<video>`. Once each asset finishes decoding, the effect recalculates total width, guaranteeing the wrapping math uses accurate measurements. Large MP4 files often hydrate late; this hook ensures those late arrivals never cause sudden speed spikes.
+
+Together these hooks isolate imperative animation math from declarative markup. The site benefits through smoother motion, fewer layout shifts, plus predictable cleanup during navigation—all of which elevate Bold Frame Media's premium feel.

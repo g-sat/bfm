@@ -1,6 +1,6 @@
 "use client";
 
-import { Hero3D } from "./Hero3D";
+import Hero3DModel from "./Hero3D";
 import { HeroText } from "./HeroText";
 import { ProximityHeroFrames } from "./ProximityHeroFrames";
 
@@ -24,7 +24,7 @@ export const HeroSection = () => {
         <div className="relative w-full max-w-[80vw] h-screen flex flex-col">
           <div className="grow relative">
             <div className="absolute top-0 right-0 w-1/3 h-full z-25 pointer-events-none">
-              <Hero3D />
+              <Hero3DModel />
             </div>
 
             <div className="absolute inset-0 flex items-center justify-start pl-16 z-25 pointer-events-none">
