@@ -129,7 +129,7 @@ export function HeroText() {
 
       <a
         ref={buttonRef}
-        href="https://front.hc.engineering/workbench/platform"
+        href="https://www.sathwikgarikapati.in/"
         className="cursor-pointer pointer-events-auto relative z-20 overflow-hidden rounded-full border border-white/60 bg-[#d1d1d1]
           inline-flex w-fit items-center justify-center uppercase font-bold h-10 text-black
           transition-colors duration-200 tracking-tight space-x-1 py-6 px-18
