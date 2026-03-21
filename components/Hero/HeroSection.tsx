@@ -1,6 +1,5 @@
 "use client";
 
-import Hero3DModel from "./Hero3D";
 import { HeroText } from "./HeroText";
 import { ProximityHeroFrames } from "./ProximityHeroFrames";
 

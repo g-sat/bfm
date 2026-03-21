@@ -564,7 +564,7 @@ export const LaserFlow: React.FC<Props> = ({
   }, [
     wispDensity, mouseTiltStrength, horizontalBeamOffset, verticalBeamOffset,
     flowSpeed, verticalSizing, horizontalSizing, fogIntensity, fogScale,
-    wispSpeed, wispIntensity, flowStrength, decay, falloffStart, fogFallSpeed
+    wispSpeed, wispIntensity, flowStrength, decay, falloffStart, fogFallSpeed, direction
   ]);
 
   // ✅ FIXED ANIMATION LOOP (TYPE-SAFE UNIFORM UPDATES)
@@ -713,7 +713,7 @@ export const LaserFlow: React.FC<Props> = ({
       
       if (mount.contains(canvas)) mount.removeChild(canvas);
     };
-  }, [createRenderer, setupScene, mouseSmoothTime, resolveDevicePixelRatio]);
+  }, [createRenderer, setupScene, mouseSmoothTime, resolveDevicePixelRatio, contextLost]);
 
   // ✅ FIXED PROPS UPDATE (TYPE-SAFE)
   useEffect(() => {
@@ -745,7 +745,7 @@ export const LaserFlow: React.FC<Props> = ({
   }, [
     wispDensity, mouseTiltStrength, horizontalBeamOffset, verticalBeamOffset,
     flowSpeed, verticalSizing, horizontalSizing, fogIntensity, fogScale,
-    wispSpeed, wispIntensity, flowStrength, decay, falloffStart, fogFallSpeed, color
+    wispSpeed, wispIntensity, flowStrength, decay, falloffStart, fogFallSpeed, color, direction
   ]);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties, HTMLAttributes, ReactNode, useState, useEffect } from "react";
+import { CSSProperties, ReactNode, useState, useEffect } from "react";
 import { HTMLMotionProps, motion, Variants } from "framer-motion";
 import { ArrowUpRight, Lock, Sparkles } from "lucide-react";
 import { BackgroundGlobe } from "./BackgroundGlobe";
@@ -278,7 +278,7 @@ const AboutGrid = ({ fill = "#0F0C1B", children, style: containerStyle, ...props
                         
                         <p className="text-[10px] text-white/40 uppercase tracking-widest mb-1 group-hover:text-purple-300/60 transition-colors">Vision</p>
                         <p className="text-xs font-semibold text-white/80 leading-snug group-hover:text-white transition-colors">
-                            Unlock your brand's <br/> true potential.
+                            Unlock your brand&apos;s <br/> true potential.
                         </p>
                     </div>
                 </motion.div>
