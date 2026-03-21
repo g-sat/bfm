@@ -6,7 +6,7 @@ import { ProximityHeroFrames } from "./ProximityHeroFrames";
 
 export const HeroSection = () => {
   return (
-    <section className="relative min-h-screen">
+    <section id="hero" className="relative min-h-screen">
       <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,3,15,0.95)0%,rgba(6,4,20,0.92)45%,rgba(7,5,24,0.88)70%,rgba(5,3,15,0.98)100%)]" />
         <div className="absolute -top-48 -left-40 h-[70vh] w-[70vw] bg-[radial-gradient(circle_at_20%_0%,rgba(108,99,255,0.32),transparent_70%)] blur-[160px]" />
@@ -23,10 +23,6 @@ export const HeroSection = () => {
 
         <div className="relative w-full max-w-[80vw] h-screen flex flex-col">
           <div className="grow relative">
-            <div className="absolute top-0 right-0 w-1/3 h-full z-25 pointer-events-none">
-              <Hero3DModel />
-            </div>
-
             <div className="absolute inset-0 flex items-center justify-start pl-16 z-25 pointer-events-none">
               <HeroText />
             </div>

@@ -2,9 +2,11 @@
 "use client";
 import { useEffect, useRef } from 'react';
 import { useGLTF } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
 import type { ThreeElements } from '@react-three/fiber'
-import type { Mesh, MeshStandardMaterial } from 'three'
+import { MathUtils, Mesh, MeshStandardMaterial } from 'three'
 import type { GLTF } from 'three-stdlib'
+import { inAboutSection } from './Hero3D'
 
 interface GLTFResult extends GLTF {
   nodes: {
@@ -22,19 +24,29 @@ export function Model(props: ModelProps) {
   const { nodes, materials } = useGLTF('/assets/Model/bfm.glb') as unknown as GLTFResult
   const meshRef = useRef<Mesh>(null)
 
+  // Initial material setup
   useEffect(() => {
     if (meshRef.current) {
       const mat = meshRef.current.material as MeshStandardMaterial
       mat.transparent = true
-      mat.opacity = 0.3
-      mat.color.set('#000000') // vivid red tint
+      mat.color.set('#000000') // solid-black base
       mat.emissive.set('#000000')
-      mat.emissiveIntensity = 0.35
       mat.roughness = 0.08
       mat.metalness = 0.0
       mat.needsUpdate = true
     }
   }, [materials])
+
+  // Real-time material updates for transition
+  useFrame((_, delta) => {
+    if (!meshRef.current) return
+    const mat = meshRef.current.material as MeshStandardMaterial
+    
+    // Lerp opacity: 1.0 in About section, 0.6 in Hero (glass-like)
+    const targetOpacity = inAboutSection.value ? 1.0 : 0.6;
+    mat.opacity = MathUtils.lerp(mat.opacity, targetOpacity, 1 - Math.pow(0.12, delta * 60))
+    mat.needsUpdate = true;
+  })
 
   return (
     <group {...props} dispose={null}>
