@@ -8,11 +8,11 @@ import { BlendFunction } from 'postprocessing';
 import { Model } from '../Hero/Model';
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import Image from 'next/image';
-import { Group } from 'three';
+import { Group, Mesh, MeshStandardMaterial } from 'three';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
-const MODEL_POS: [number, number, number] = [0, 0.15, 0];
+const MODEL_POS: [number, number, number] = [0, 0.35, 0];
 const LAUNCH_DATE = new Date('2026-09-01T00:00:00');
 
 // Pre-computed particle values to avoid hydration mismatch
@@ -36,8 +36,6 @@ const PARTICLES = [
 ];
 
 
-// ─── Mouse tracking (plain object to avoid re-renders) ────────────────────────
-const mouse = { x: 0, y: 0 };
 
 // ─── 3D Scene ─────────────────────────────────────────────────────────────────
 
@@ -52,18 +50,30 @@ function HorizonLine() {
 
 function SceneModel() {
   const groupRef = useRef<Group>(null);
+  const materialOverridden = useRef(false);
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     if (!groupRef.current) return;
-    const tx = mouse.y * 0.22;
-    const ty = mouse.x * 0.42;
-    groupRef.current.rotation.x += (tx - groupRef.current.rotation.x) * 0.05;
-    groupRef.current.rotation.y += (ty - groupRef.current.rotation.y) * 0.05;
+
+    // Override material once the model has loaded — makes rim lights actually pop
+    if (!materialOverridden.current) {
+      groupRef.current.traverse((child) => {
+        if (child instanceof Mesh) {
+          const mat = child.material as MeshStandardMaterial;
+          mat.metalness = 0.92;
+          mat.roughness = 0.03;
+          mat.needsUpdate = true;
+          materialOverridden.current = true;
+        }
+      });
+    }
+
+    groupRef.current.rotation.y += delta * 0.35;
   });
 
   return (
     <group ref={groupRef} position={MODEL_POS}>
-      <Model rotation={[-0.14, 0, 0]} scale={2.2} />
+      <Model rotation={[0, 0, 0]} scale={1.6} />
     </group>
   );
 }
@@ -168,12 +178,7 @@ export default function ComingSoon() {
   useEffect(() => {
     RectAreaLightUniformsLib.init();
     const t = setTimeout(() => setMounted(true), 120);
-    const onMove = (e: MouseEvent) => {
-      mouse.x = (e.clientX / window.innerWidth)  * 2 - 1;
-      mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
-    };
-    window.addEventListener('mousemove', onMove);
-    return () => { clearTimeout(t); window.removeEventListener('mousemove', onMove); };
+    return () => { clearTimeout(t); };
   }, []);
 
   const toggleAudio = () => {
@@ -234,19 +239,25 @@ export default function ComingSoon() {
           <color attach="background" args={['#03040a']} />
           <Stars radius={150} depth={75} count={7000} factor={3.8} saturation={0.18} fade speed={0.3} />
 
-          <ambientLight intensity={0.28} />
-          <directionalLight position={[-2, 4, -8]} intensity={0.75} color="#ffd0a0" />
-          <spotLight position={[3, 2, 5]} angle={0.36} penumbra={0.95} intensity={26} color="#90c8ff" />
-          <pointLight position={[-2.5, -1, 3.5]} intensity={160} color="#ff1818" decay={1.5} distance={16} />
-          <pointLight position={[0.4, 0.4, -8]} intensity={220} color="#fde68a" decay={1} distance={22} />
+          <ambientLight intensity={0.14} />
+          <directionalLight position={[-2, 4, -8]} intensity={0.35} color="#c084fc" />
+          <spotLight position={[3, 2, 5]} angle={0.36} penumbra={0.95} intensity={120} color="#c084fc" />
+          {/* Gold rim backlights — directly behind model, creates neon-edge lining */}
+          <pointLight position={[0, 0.5, -3.6]} intensity={125} color="#ffc844" decay={2} distance={9} />
+          <pointLight position={[0, 2.8, -3.2]} intensity={70} color="#ffaa00" decay={2} distance={8} />
+          {/* Red & purple fill */}
+          <pointLight position={[-2.5, -1, 3.5]} intensity={60} color="#ff1818" decay={1.5} distance={16} />
+          <pointLight position={[2.5, 1, 3]}     intensity={50} color="#a855f7" decay={1.5} distance={16} />
 
           <Suspense fallback={null}>
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            <rectAreaLight position={[0, -10, 2]} lookAt={MODEL_POS as any} width={4} height={9} intensity={28} color="#ffeedd" />
+            <rectAreaLight position={[0, -10, 2]} lookAt={MODEL_POS as any} width={4} height={9} intensity={5} color="#ffeedd" />
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            <rectAreaLight position={[0, 9, -2]}  lookAt={MODEL_POS as any} width={4} height={9} intensity={24} color="#a855f7" />
+            <rectAreaLight position={[0, 9, -2]}  lookAt={MODEL_POS as any} width={4} height={9} intensity={30} color="#a855f7" />
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            <rectAreaLight position={[-4, 0, 2]}  lookAt={MODEL_POS as any} width={2} height={10} intensity={18} color="#ff1a1a" />
+            <rectAreaLight position={[4, 0, 5]}  lookAt={MODEL_POS as any} width={2} height={10} intensity={16} color="#ff1a1a" />
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            <rectAreaLight position={[-4, 0, 5]}   lookAt={MODEL_POS as any} width={2} height={10} intensity={16} color="#9333ea" />
 
             <HorizonLine />
             <SceneModel />
@@ -258,7 +269,7 @@ export default function ComingSoon() {
                 radialModulation
                 modulationOffset={0.26}
               />
-              <Bloom intensity={2.4} luminanceThreshold={0.22} luminanceSmoothing={0.88} mipmapBlur />
+              <Bloom intensity={3.2} luminanceThreshold={0.15} luminanceSmoothing={0.85} mipmapBlur />
               <Vignette eskil={false} offset={0.25} darkness={0.90} />
             </EffectComposer>
           </Suspense>
@@ -351,10 +362,10 @@ export default function ComingSoon() {
           {/* Logo */}
           <div style={{ filter: 'drop-shadow(0 0 20px rgba(220,30,30,0.7)) drop-shadow(0 0 52px rgba(220,30,30,0.28))' }}>
             <Image
-              src="/BFM_Main_RW.svg"
+              src="/BFM_Main_RB.svg"
               alt="Bold Frame Media"
-              width={170}
-              height={64}
+              width={48}
+              height={18}
               className="object-contain"
               priority
             />
